@@ -1,7 +1,6 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
-
+#pragma once
 #include <QMainWindow>
+#include "gamewindow.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -14,8 +13,13 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    GameWindow *gamewindow;
+    void playMusic(const QString& s);
 
+private slots:
+    void on_quitButton_clicked();
+
+    void on_playButton_clicked();
 private:
     Ui::MainWindow *ui;
 };
-#endif // MAINWINDOW_H

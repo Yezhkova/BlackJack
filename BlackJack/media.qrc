@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>resources/images/playtech.jpg</file>
+    </qresource>
+    <qresource prefix="/sounds">
+        <file>resources/sounds/tz.wav</file>
+        <file>resources/sounds/ukulele.wav</file>
+    </qresource>
+</RCC>

@@ -1,15 +1,48 @@
 #include "mainwindow.h"
+#include "gamewindow.h"
 #include "ui_mainwindow.h"
+#include <QPixmap>
+#include <QSoundEffect>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    this->setWindowTitle("Hello!");
+    for(int i = 2; i < 4; ++i){
+        ui->playersNumberComboBox->addItem(QString::number(i));
+    }
+    QPixmap background(":/images/resources/images/playtech.jpg");
+    ui->bgLabel->setPixmap(background);
+    ui->bgLabel->lower();
+    this->setFixedSize(800,600);
+    this->show();
+}
+
+void MainWindow::on_quitButton_clicked()
+{
+    QApplication::quit();
+}
+
+void MainWindow::on_playButton_clicked()
+{
+    gamewindow = new GameWindow(this);
+    gamewindow->show();
+    this->hide();
+}
+
+void MainWindow::playMusic(const QString& s)
+{
+    QSoundEffect effect;
+    effect.setSource(QUrl::fromLocalFile(s));
+    effect.setVolume(1.0);
+    effect.play();
+    QEventLoop eventloop;
+    eventloop.exec();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
-
