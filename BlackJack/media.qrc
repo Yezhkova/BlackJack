@@ -5,5 +5,6 @@
     <qresource prefix="/sounds">
         <file>resources/sounds/tz.wav</file>
         <file>resources/sounds/ukulele.wav</file>
+        <file>resources/sounds/ukulele.mp3</file>
     </qresource>
 </RCC>

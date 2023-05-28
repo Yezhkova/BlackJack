@@ -1,8 +1,9 @@
 #include "mainwindow.h"
 #include "gamewindow.h"
+#include "musicthread.h"
+#include "qsoundeffect.h"
 #include "ui_mainwindow.h"
 #include <QPixmap>
-#include <QSoundEffect>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -18,15 +19,24 @@ MainWindow::MainWindow(QWidget *parent)
     ui->bgLabel->lower();
     this->setFixedSize(800,600);
     this->show();
+    // Start the thread to play the background music
+    musicThread = new MusicThread;
+    musicThread->start();
 }
 
 void MainWindow::on_quitButton_clicked()
 {
+    musicThread->quit();
+    musicThread->requestInterruption();
+
     QApplication::quit();
 }
 
 void MainWindow::on_playButton_clicked()
 {
+    musicThread->quit();
+    musicThread->requestInterruption();
+
     gamewindow = new GameWindow(this);
     gamewindow->show();
     this->hide();

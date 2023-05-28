@@ -1,6 +1,7 @@
 #pragma once
 #include <QMainWindow>
 #include "gamewindow.h"
+#include "musicthread.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -20,6 +21,9 @@ private slots:
     void on_quitButton_clicked();
 
     void on_playButton_clicked();
+
 private:
     Ui::MainWindow *ui;
+    MusicThread *musicThread;
+
 };
