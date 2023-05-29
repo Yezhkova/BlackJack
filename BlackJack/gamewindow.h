@@ -13,6 +13,13 @@ public:
     explicit GameWindow(QWidget *parent = nullptr);
     ~GameWindow();
 
+    void closeEvent(QCloseEvent *event) override
+    {
+        exit(0);
+        // Accept the close event to allow the window to close
+//        event->accept();
+    }
+
 private:
     Ui::GameWindow *ui;
 };
