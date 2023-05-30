@@ -17,6 +17,11 @@ public:
         m_balance -= money;
     }
 
+    void makeBet() {
+
+    };
+
+
 private:
     int m_balance = 100;
 };

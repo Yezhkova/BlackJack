@@ -9,6 +9,8 @@ class Dealer: public Participant
 public:
     Dealer();
     void dealCards(Player& player, int numberOfcards);
+    void makeDeck();
+    void checkCardAmount();
 
 private:
     void makeSuit(const std::string& suit);

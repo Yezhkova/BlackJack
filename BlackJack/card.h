@@ -16,6 +16,10 @@ public:
         return m_suit;
     }
 
+    std::string getName() const {
+        return m_name;
+    }
+
     int getNumber() const {
         return m_number;
     }

@@ -2,6 +2,7 @@
 
 #include "card.h"
 #include <vector>
+#include <QDebug>
 
 class Participant
 {
@@ -23,20 +24,34 @@ public:
     {
         m_hand.push_back(card);
         m_score += card.getNumber();
+//        qDebug() << m_hand.cbegin()->getName() << " taken. Score: " << m_score;
+        if(m_hand.cbegin()->getName() == "Ace" && m_score > 21) {
+            m_score -= 10;
+        }
+//        qDebug() << "Score after levelling: " << m_score;
+
     }
 
     void setAsUser() {
-        is_user = true;
+        m_is_user = true;
     }
 
     void setAsDealer() {
-        is_dealer = true;
+        m_is_dealer = true;
+    }
+
+    bool is_user(){
+        return m_is_user;
+    }
+
+    bool is_dealer(){
+        return m_is_dealer;
     }
 
 private:
     std::vector<Card> m_hand;
     int m_score;
-    bool is_user = false;
-    bool is_dealer = false;
+    bool m_is_user = false;
+    bool m_is_dealer = false;
 };
 
