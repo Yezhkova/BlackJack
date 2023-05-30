@@ -7,6 +7,7 @@ class GameProcess
 {
 public:
     GameProcess(int playersNumber);
+    void playRound();
 
 private:
     Dealer m_dealer;

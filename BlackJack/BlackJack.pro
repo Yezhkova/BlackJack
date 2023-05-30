@@ -12,7 +12,6 @@ SOURCES += \
     bet.cpp \
     card.cpp \
     dealer.cpp \
-    deck.cpp \
     gameprocess.cpp \
     gamewindow.cpp \
     main.cpp \
@@ -25,7 +24,6 @@ HEADERS += \
     bet.h \
     card.h \
     dealer.h \
-    deck.h \
     gameprocess.h \
     gamewindow.h \
     mainwindow.h \

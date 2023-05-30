@@ -17,13 +17,7 @@ public:
         m_balance -= money;
     }
 
-    void setAsUser()
-    {
-        is_user = true;
-    }
-
 private:
     int m_balance = 100;
-    bool is_user = false;
 };
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-
+#include <map>
 class Card
 {
 public:
@@ -24,5 +24,9 @@ private:
     std::string m_suit;
     std::string m_name;
     int m_number;
+
+public:
+    static std::map<std::string, int> cards;
+    static int fullDeck;
 };
 

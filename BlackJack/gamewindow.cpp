@@ -8,7 +8,6 @@ GameWindow::GameWindow(MainWindow *parent, int playersNum) :
     m_game(playersNum)
 {
     ui->setupUi(this);
-//
 }
 
 GameWindow::~GameWindow()
