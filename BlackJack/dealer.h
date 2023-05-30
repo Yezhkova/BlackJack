@@ -1,11 +1,10 @@
-#ifndef DEALER_H
-#define DEALER_H
+#pragma once
 
+#include "participant.h"
 
-class Dealer
+class Dealer: public Participant
 {
 public:
     Dealer();
 };
 
-#endif // DEALER_H

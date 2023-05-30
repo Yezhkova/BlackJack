@@ -37,7 +37,8 @@ void MainWindow::on_playButton_clicked()
     musicThread->quit();
     musicThread->requestInterruption();
 
-    gamewindow = new GameWindow(this);
+    QString players = ui->playersNumberComboBox->currentText();
+    gamewindow = new GameWindow( this, players.toInt() );
     gamewindow->show();
     this->hide();
 }

@@ -13,6 +13,7 @@ SOURCES += \
     card.cpp \
     dealer.cpp \
     deck.cpp \
+    gameprocess.cpp \
     gamewindow.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -25,6 +26,7 @@ HEADERS += \
     card.h \
     dealer.h \
     deck.h \
+    gameprocess.h \
     gamewindow.h \
     mainwindow.h \
     musicthread.h \

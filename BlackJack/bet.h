@@ -1,11 +1,7 @@
-#ifndef BET_H
-#define BET_H
-
-
+#pragma once
 class Bet
 {
 public:
     Bet();
 };
 
-#endif // BET_H
