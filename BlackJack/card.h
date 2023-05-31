@@ -12,6 +12,23 @@ public:
         {
         };
 
+//    Card(Card&& c)
+//        : m_suit(c.m_suit)
+//        , m_name(c.m_name)
+//        , m_number(c.m_number)
+//    {
+//    };
+
+//    Card(const Card& c)
+//        : m_suit(c.m_suit)
+//        , m_name(c.m_name)
+//        , m_number(c.m_number)
+
+//    {
+//    };
+
+//    ~Card() = default;
+
     std::string getSuit() const {
         return m_suit;
     }

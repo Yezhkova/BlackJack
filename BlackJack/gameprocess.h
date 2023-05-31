@@ -14,4 +14,7 @@ private:
     int m_playersNum;
     std::vector<Player> m_players;
 
+public:
+    static double winCoeff;
+
 };

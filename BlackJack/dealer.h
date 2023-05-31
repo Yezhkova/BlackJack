@@ -1,16 +1,24 @@
 #pragma once
 
 #include "participant.h"
-#include "player.h"
 #include <list>
 
 class Dealer: public Participant
 {
 public:
     Dealer();
-    void dealCards(Player& player, int numberOfcards);
+    void dealCards(Participant& participant, int numberOfcards);
     void makeDeck();
     void checkCardAmount();
+    int compareScore(Participant& participant);
+    void act(Participant& participant) {
+        while(participant.getScore() < 17)
+        {
+            if(participant.isActive()){
+                dealCards(participant, 1);
+            }
+        }
+    }
 
 private:
     void makeSuit(const std::string& suit);
