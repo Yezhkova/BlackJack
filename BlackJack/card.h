@@ -49,5 +49,8 @@ private:
 public:
     static std::map<std::string, int> cards;
     static int fullDeck;
+    static int cardWidth;
+    static int cardHeight;
+
 };
 

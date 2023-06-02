@@ -18,11 +18,6 @@ void GameProcess::playRound()
     for(auto& player: m_players)
     {
         player.makeBet();
-    }
-
-    // each participant gets initial cards, including the dealer
-    for(auto& player: m_players)
-    {
         m_dealer.dealCards(player, 2);
     }
 
@@ -30,6 +25,8 @@ void GameProcess::playRound()
     m_dealer.checkForBlackjack();
     m_dealer.act(m_dealer);
     m_dealer.checkCardAmount();
+
+
 
     for(auto& player: m_players)
     {
@@ -40,7 +37,7 @@ void GameProcess::playRound()
             {
                 m_dealer.act(player);
             }
-            // human
+            // palyer is human (user)
             else
             {
                 while(player.isActive())
@@ -61,14 +58,11 @@ void GameProcess::playRound()
             {
                 player.winMoney(winCoeff * player.getBet());
             }
-            if(evaluate < 0)
+            else if(evaluate < 0)
             {
                 player.loseMoney(player.getBet());
             }
             // emit blackjack
         }
-
-
-
     }
 }

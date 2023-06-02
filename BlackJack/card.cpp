@@ -18,3 +18,5 @@ std::map<std::string, int> Card::cards
 };
 
 int Card::fullDeck = 52;
+int Card::cardWidth = 80;
+int Card::cardHeight = 130;

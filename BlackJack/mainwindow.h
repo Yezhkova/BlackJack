@@ -15,12 +15,14 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     GameWindow *gamewindow;
-    void playMusic(const QString& s);
 
 private slots:
     void on_quitButton_clicked();
 
     void on_playButton_clicked();
+
+signals:
+    void muteBackgroundMusic();
 
 private:
     Ui::MainWindow *ui;

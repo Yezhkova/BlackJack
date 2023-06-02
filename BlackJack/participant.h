@@ -95,7 +95,6 @@ public:
         m_is_bust = bust;
     }
 
-
 private:
     std::vector<Card> m_hand;
     int m_score = 0;

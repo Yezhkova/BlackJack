@@ -4,17 +4,37 @@
 #include <QMediaPlayer>
 #include <QAudioOutput>
 
-MusicThread::MusicThread()
+MusicThread::MusicThread(const QString& fileName, int loopCount)
+    :m_fileName(fileName)
+    , m_loopCount(loopCount)
 {
+    m_effect.setSource(QUrl::fromLocalFile(m_fileName));
+    m_effect.setLoopCount(m_loopCount);
 }
 
 void MusicThread::run()
 {
-    QSoundEffect effect;
-    effect.setSource(QUrl::fromLocalFile(":/sounds/resources/sounds/ukulele.wav"));
-    effect.setLoopCount(QSoundEffect::Infinite);
-    effect.setVolume(0.25f);
-    effect.play();
+    m_effect.play();
     QEventLoop eventloop;
     eventloop.exec();
 }
+
+void MusicThread::endLater()
+{
+    m_effect.setLoopCount(0);
+    m_effect.setMuted(true);
+    this->quit();
+    this->requestInterruption();
+}
+
+void MusicThread::muteSound(int arg)
+{
+    if(arg == 0) m_effect.setMuted(true);
+    else if(arg == 2) m_effect.setMuted(false);
+}
+
+void MusicThread::unmuteSound()
+{
+    m_effect.setMuted(false);
+}
+

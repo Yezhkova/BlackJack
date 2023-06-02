@@ -5,7 +5,7 @@
 class Player: public Participant
 {
 public:
-    Player();
+    Player() = default;
 
     void winMoney(int money)
     {
@@ -23,7 +23,7 @@ public:
 
     void makeBet()
     {
-//        m_bet = bet;
+        m_bet = rand() % bets.size();
     }
 
     int getBet()
@@ -31,9 +31,12 @@ public:
         return m_bet;
     }
 
-
 private:
     int m_balance = 100;
     int m_bet;
+
+public:
+    static std::array<int, 5> bets;
+
 };
 

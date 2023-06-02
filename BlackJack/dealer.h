@@ -12,11 +12,9 @@ public:
     void checkCardAmount();
     int compareScore(Participant& participant);
     void act(Participant& participant) {
-        while(participant.getScore() < 17)
+        while(participant.getScore() < 17 && participant.isActive())
         {
-            if(participant.isActive()){
-                dealCards(participant, 1);
-            }
+            dealCards(participant, 1);
         }
     }
 

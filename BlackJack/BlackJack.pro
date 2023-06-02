@@ -9,7 +9,6 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    bet.cpp \
     card.cpp \
     dealer.cpp \
     gameprocess.cpp \
@@ -18,10 +17,11 @@ SOURCES += \
     mainwindow.cpp \
     musicthread.cpp \
     participant.cpp \
-    player.cpp
+    player.cpp \
+    user.cpp
 
 HEADERS += \
-    bet.h \
+    Stylesheet.h \
     card.h \
     dealer.h \
     gameprocess.h \
@@ -29,7 +29,8 @@ HEADERS += \
     mainwindow.h \
     musicthread.h \
     participant.h \
-    player.h
+    player.h \
+    user.h
 
 FORMS += \
     gamewindow.ui \
