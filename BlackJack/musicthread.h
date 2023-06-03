@@ -6,7 +6,7 @@ class MusicThread : public QThread
 {
 public:
     MusicThread(const QString& fileName, int loopCount);
-    void run();
+    void run() override;
     void endLater();
 
 public slots:
