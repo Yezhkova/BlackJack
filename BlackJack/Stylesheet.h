@@ -21,3 +21,7 @@ QString checkBoxStyle = "QCheckBox::indicator"
                         "{"
                         "background-color: grey" // Replace with your own unchecked indicator image
                         "}";
+
+QString greaterFont = "font-size: 20px; color: white; font-weight: bold;";
+
+QString smallerFont = "font-size: 15px; font-weight: bold;";

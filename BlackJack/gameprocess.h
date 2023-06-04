@@ -3,23 +3,31 @@
 #include "dealer.h"
 #include "player.h"
 
-class GameProcess
+class GameProcess: public QObject
 {
+
+    Q_OBJECT
+
 public:
     GameProcess(int playersNumber);
-    void playRound();
 
     int getPlayersNum() const
     {
         return m_playersNum;
     }
 
-    Dealer getDealer()
+    Dealer& getDealer()
     {
         return m_dealer;
     }
 
+    std::vector<Player>& getPlayers()
+    {
+        return m_players;
+    }
+
 public slots:
+    void playRound();
 
 signals:
 

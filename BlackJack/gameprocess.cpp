@@ -8,7 +8,8 @@ GameProcess::GameProcess(int playersNumber) : m_playersNum(playersNumber)
     //    qDebug() << "playersNumber = " << playersNumber << '\n';
 
     for(int i = 0; i < playersNumber; ++i){
-        m_players.emplace_back(Player());
+        Player p(QString("Player%1").arg(i));
+        m_players.push_back(p);
     }
     m_players[0].setAsUser();
 }
@@ -17,7 +18,7 @@ void GameProcess::playRound()
 {
     for(auto& player: m_players)
     {
-        player.makeBet();
+//        player.makeBet();
         m_dealer.dealCards(player, 2);
     }
 
@@ -25,8 +26,6 @@ void GameProcess::playRound()
     m_dealer.checkForBlackjack();
     m_dealer.act(m_dealer);
     m_dealer.checkCardAmount();
-
-
 
     for(auto& player: m_players)
     {

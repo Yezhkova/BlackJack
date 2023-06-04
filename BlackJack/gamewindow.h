@@ -30,12 +30,13 @@ public:
 
     void drawPicture(
         QLabel *label
-        , const QString& fileName
-        , int posX, int posY
-        , int width, int height);
+        , const QString& fileName);
 
 public slots:
-
+    void displayCard(const QString& receiver
+                     , const QString& cardName
+                     , int cardNum);
+    void displayScore(const QString& receiver, int score);
 
 signals:
 
@@ -47,17 +48,18 @@ private:
     GameProcess m_game;
     int m_globWidth = 1280;
     int m_globHeight = 720;
+    QLabel *m_backgroundLabel;
 
-    std::vector<QGroupBox*> m_participantsSetups;
+    std::map<QString, QGroupBox*> m_participantsSetups;
+
+    QCheckBox *m_soundControl;
 
     QPushButton *m_hitButton;
     QPushButton *m_standButton;
-    QCheckBox *m_soundControl;
-
-    QLabel *m_backgroundLabel;
-
-    QComboBox *m_betBox;
     QLabel *m_makeYourBetLabel;
+    QPushButton *m_playButton;
+    QComboBox *m_betBox;
+
    // Sound file locations
     QString BackgroundMusicPath;
     QString BackgroundPicPath;

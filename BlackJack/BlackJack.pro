@@ -17,8 +17,7 @@ SOURCES += \
     mainwindow.cpp \
     musicthread.cpp \
     participant.cpp \
-    player.cpp \
-    user.cpp
+    player.cpp
 
 HEADERS += \
     Stylesheet.h \
@@ -29,8 +28,7 @@ HEADERS += \
     mainwindow.h \
     musicthread.h \
     participant.h \
-    player.h \
-    user.h
+    player.h
 
 FORMS += \
     gamewindow.ui \

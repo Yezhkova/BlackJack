@@ -26,14 +26,10 @@ GameWindow::GameWindow(MainWindow *parent, int playersNum) :
     int x = (screenGeometry.width()-this->width()) / 2;
     int y = (screenGeometry.height()-this->height()) / 2;
     this->move(x, y);
-//    int x = screenGeometry.width();
-//    int y = screenGeometry.height();
-//    this->setFixedSize(x,y);
 
     m_backgroundLabel = new QLabel(this);
-    drawPicture(m_backgroundLabel
-                , BackgroundPicPath
-                , 0, 0, m_globWidth, m_globHeight);
+    m_backgroundLabel->setGeometry(0, 0, m_globWidth, m_globHeight);
+    drawPicture(m_backgroundLabel, BackgroundPicPath);
 
     m_musicThread = new MusicThread(BackgroundMusicPath, -2);
     m_musicThread->start();
@@ -47,129 +43,127 @@ GameWindow::GameWindow(MainWindow *parent, int playersNum) :
     m_soundControl->setStyleSheet(checkBoxStyle);
     m_soundControl->setGeometry(50, 50, 350, 100);
     connect(m_soundControl, &QCheckBox::stateChanged, m_musicThread, &MusicThread::muteSound);
-
     for(int i = 0; i < m_game.getPlayersNum(); ++i)
     {
         int newinitPointX = initPointX * (i+1);
 
-        QGroupBox* groupBox = new QGroupBox(QString("Player%1Box").arg(i+1), this);
-        groupBox->setTitle("");
+        QGroupBox* groupBox = new QGroupBox(this);
+        groupBox->setObjectName(QString("Player%1Box").arg(i));
         groupBox->setStyleSheet("border:0px;");
         int boxWidth = Card::cardWidth+230;
         int boxHeight = Card::cardHeight+300;
 
         groupBox->setGeometry(newinitPointX - boxWidth/2, initPointY, boxWidth, boxHeight);
 
-        QLabel* scoreTextLabel = new QLabel(QString("Player%1ScoreTextLabel").arg(i+1), groupBox);
+        QLabel* scoreTextLabel = new QLabel(groupBox);
         int scoreTextWidth = 140;
-        int scoreTextHeight = 20;
+        int scoreTextHeight = 25;
         int scoreTextX = 0;
         int scoreTextY = 20;
-        scoreTextLabel->setStyleSheet("opacity: 0.5;font-size: 20px; color: white; font-weight: bold;");
+        scoreTextLabel->setStyleSheet(greaterFont);
         if(i == 0) {
             scoreTextLabel->setText("User Score:");
         }
         else {
-            scoreTextLabel->setText(QString("Player %1 Score:").arg(i+1));
+            scoreTextLabel->setText(QString("Player %1 Score:").arg(i));
         }
         scoreTextLabel->setGeometry(scoreTextX, scoreTextY, scoreTextWidth, scoreTextHeight);
 
-        QLabel* scoreLabel = new QLabel(QString("Player%1ScoreLabel").arg(i+1), groupBox);
+        QLabel* scoreLabel = new QLabel("0", groupBox);
+        scoreLabel->setObjectName(QString("Player%1ScoreLabel").arg(i));
         int scoreWidth = 50;
-        int scoreHeight = 20;
         int scoreX = scoreTextX + scoreTextWidth;
-        int scoreY = 20;
-        scoreLabel->setStyleSheet("opacity: 0.5;font-size: 20px; color: white; font-weight: bold;");
-        scoreLabel->setText("0");
-        scoreLabel->setGeometry(scoreX, scoreY, scoreWidth, scoreHeight);
+        scoreLabel->setStyleSheet(greaterFont);
+        scoreLabel->setGeometry(scoreX, scoreTextY, scoreWidth, scoreTextHeight);
 
-        QLabel *balanceTextLabel = new QLabel(QString("Player%1BalanceTextLabel").arg(i+1), groupBox);
+        QLabel *balanceTextLabel = new QLabel("Balance:", groupBox);
         int balanceTextWidth = 90;
-        int balanceTextHeight = 20;
+        int balanceTextHeight = 25;
         int balanceTextX = scoreTextX;
         int balanceTextY = scoreTextY + scoreTextHeight + 5;
-        balanceTextLabel->setStyleSheet("opacity: 0.5;font-size: 20px; color: white; font-weight: bold;");
-        balanceTextLabel->setText("Balance:");
+        balanceTextLabel->setStyleSheet(greaterFont);
         balanceTextLabel->setGeometry(balanceTextX, balanceTextY, balanceTextWidth, balanceTextHeight);
 
-        QLabel* balanceLabel = new QLabel(QString("Player%1BalanceLabel").arg(i+1), groupBox);
+        QLabel *balanceLabel = new QLabel(0, groupBox);
+        balanceLabel->setObjectName(QString("Player%1BalanceLabel").arg(i));
         int balanceWidth = 50;
-        int balanceHeight = 20;
         int balanceX = balanceTextX + balanceTextWidth;
-        int balanceY = balanceTextY;
-        balanceLabel->setStyleSheet("opacity: 0.5;font-size: 20px; color: white; font-weight: bold;");
+        balanceLabel->setStyleSheet(greaterFont);
         balanceLabel->setText("0");
-        balanceLabel->setGeometry(balanceX, balanceY, balanceWidth, balanceHeight);
+        balanceLabel->setGeometry(balanceX, balanceTextY, balanceWidth, balanceTextHeight);
 
-        QLabel* handLabels[12];
-        int handPositionX = 25;
-        int handPositionY = balanceY + balanceHeight + 5;
+        int handPositionX = 30;
+        int handPositionY = balanceTextY + balanceTextHeight + 5;
         for(int card = 0; card < 11; ++card)
         {
-            handLabels[card] = new QLabel(QString("Player%1CardLabel%2").arg(i+1).arg(card+1), groupBox);
-            handLabels[card]->setGeometry(0 + handPositionX, 0 + handPositionY, Card::cardWidth, Card::cardHeight);
-            handLabels[card]->setText("");
-            if(card < 3){
-            drawPicture(handLabels[card]
-                        , CardBackPicPath
-                        , 0 + handPositionX, 0 + handPositionY
-                        , Card::cardWidth, Card::cardHeight);
-            }
+            QLabel *handLabel = new QLabel(groupBox);
+            handLabel->setObjectName(QString("Player%1CardLabel%2").arg(i).arg(card));
+            handLabel->setGeometry(0 + handPositionX, 0 + handPositionY, Card::cardWidth, Card::cardHeight);
+//            if(card < 4){
+//            drawPicture(handLabel
+//                        , CardBackPicPath
+//                        , 0 + handPositionX, 0 + handPositionY
+//                        , Card::cardWidth, Card::cardHeight);
+//            }
             handPositionX += 10;
             handPositionY += 20;
         }
-        m_participantsSetups.push_back(groupBox);
+
+        m_participantsSetups[QString("Player%1").arg(i)] = groupBox;
     }
 
     int buttonWidth = 100;
     int buttonHeight = 40;
     int spacing = 30;
 
-    int userActionsX = m_participantsSetups[0]->x() - 140;
+    int userActionsX = m_participantsSetups["Player0"]->x() - 140;
     int hitY = 320;
     int standY = hitY+buttonHeight+spacing;
 
     int makeYourBetLabelWidth = 150;
-    int makeYourBetLabelHeight = 20;
+    int makeYourBetLabelHeight = 27;
     int betBoxWidth = 50;
     int betBoxHeight = 25;
 
     int makeYourBetLabelX = userActionsX + buttonWidth/2 - makeYourBetLabelWidth/2;
     int makeYourBetLabelY = standY+buttonHeight+spacing;
     int betBoxX = makeYourBetLabelX + makeYourBetLabelWidth/2 - betBoxWidth/2;
-    int betBoxY = makeYourBetLabelY + makeYourBetLabelHeight + spacing;
+    int betBoxY = makeYourBetLabelY + makeYourBetLabelHeight + 20;
 
-    m_hitButton = new QPushButton(this);
+    m_hitButton = new QPushButton("Hit", this);
     m_hitButton->setGeometry(userActionsX, hitY, buttonWidth, buttonHeight);
-    m_hitButton->setStyleSheet("font-size: 15px");
-    m_hitButton->setText("Hit");
+    m_hitButton->setStyleSheet(smallerFont);
     m_hitButton->setEnabled(false);
 
-    m_standButton = new QPushButton(this);
+    m_standButton = new QPushButton("Stand", this);
     m_standButton->setGeometry(userActionsX, standY, buttonWidth, buttonHeight);
-    m_standButton->setStyleSheet("font-size: 15px");
-    m_standButton->setText("Stand");
+    m_standButton->setStyleSheet(smallerFont);
     m_standButton->setEnabled(false);
 
     m_betBox = new QComboBox(this);
 
-    m_makeYourBetLabel = new QLabel(this);
-    m_makeYourBetLabel->setStyleSheet("opacity: 0.5;font-size: 20px; color: white; font-weight: bold;");
-    m_makeYourBetLabel->setText("Make your bet:");
+    m_makeYourBetLabel = new QLabel("Make your bet:", this);
+    m_makeYourBetLabel->setStyleSheet(greaterFont);
     m_makeYourBetLabel->setGeometry(makeYourBetLabelX, makeYourBetLabelY
                                   , makeYourBetLabelWidth, makeYourBetLabelHeight);
 
-    m_betBox->setStyleSheet("opacity: 0.5;font-size: 15px; font-weight: bold;");
+    m_betBox->setStyleSheet(smallerFont);
     m_betBox->addItem("5");
     m_betBox->addItem("25");
     m_betBox->addItem("50");
     m_betBox->addItem("75");
     m_betBox->addItem("100");
     m_betBox->setGeometry(betBoxX, betBoxY, betBoxWidth, betBoxHeight);
-    //            connect(betBox, &QComboBox::)
+    connect(m_betBox, &QComboBox::activated, &m_game.getPlayers()[0], &Player::setBet);
 
-    QGroupBox* groupBox = new QGroupBox(QString("DealerBox"), this);
-    groupBox->setTitle("");
+    m_playButton = new QPushButton("Play!", this);
+    m_playButton->setGeometry(userActionsX, betBoxY+150, buttonWidth, buttonHeight);
+    m_playButton->setStyleSheet(smallerFont);
+    m_playButton->setEnabled(true);
+    connect(m_playButton, &QPushButton::clicked, &m_game, &GameProcess::playRound);
+
+    QGroupBox* groupBox = new QGroupBox(this);
+    groupBox->setObjectName("DealerBox");
     groupBox->setStyleSheet("border:0px;");
     int dealerBoxWidth = Card::cardWidth+202;
     int dealerBoxHeight = Card::cardHeight+100;
@@ -177,38 +171,41 @@ GameWindow::GameWindow(MainWindow *parent, int playersNum) :
     groupBox->setGeometry(m_globWidth/2 - dealerBoxWidth/2, 40, dealerBoxWidth, dealerBoxHeight);
 
     int scoreWidth = 50;
-    int scoreHeight = 20;
+    int scoreHeight = 25;
     int scoreX = 0;
     int scoreY = 0;
 
-    QLabel *nameLabel = new QLabel(groupBox);
+    QLabel *nameLabel = new QLabel("Dealer Score:", groupBox);
     int nameWidth = 130;
-    nameLabel->setStyleSheet("opacity: 0.5;font-size: 20px; color: white; font-weight: bold;");
-    nameLabel->setText("Dealer Score:");
+    nameLabel->setStyleSheet(greaterFont);
     nameLabel->setGeometry(scoreX, scoreY, nameWidth, scoreHeight);
 
-    QLabel* scoreLabel = new QLabel(QString("DealerScoreLabel"), groupBox);
-    scoreLabel->setStyleSheet("opacity: 0.5;font-size: 20px; color: white; font-weight: bold;");
+    QLabel* scoreLabel = new QLabel("0", groupBox);
+    scoreLabel->setObjectName("DealerScoreLabel");
+    scoreLabel->setStyleSheet(greaterFont);
     scoreLabel->setText("0");
     scoreLabel->setGeometry(scoreX + nameWidth, scoreY, scoreWidth, scoreHeight);
 
-    QLabel* handLabels[12];
     int handPositionX = 0;
     int handPositionY = scoreY + scoreHeight+10;
     for(int card = 0; card < 11; ++card)
     {
-        handLabels[card] = new QLabel(QString("DealerCardLabel%1").arg(card+1), groupBox);
-        handLabels[card]->setGeometry(0 + handPositionX, handPositionY, Card::cardWidth, Card::cardHeight);
-        handLabels[card]->setText("");
+        QLabel *handLabel = new QLabel(groupBox);
+        handLabel->setObjectName(QString("DealerCardLabel%1").arg(card));
+        handLabel->setGeometry(0 + handPositionX, handPositionY, Card::cardWidth, Card::cardHeight);
         if(card < 3){
-            drawPicture(handLabels[card]
-                        , CardBackPicPath
-                        , 0 + handPositionX, handPositionY
-                        , Card::cardWidth, Card::cardHeight);
+            drawPicture(handLabel, CardBackPicPath);
         }
         handPositionX += 20;
     }
-    m_participantsSetups.push_back(groupBox);
+    m_participantsSetups["Dealer"] = groupBox;
+
+    connect(&m_game.getDealer()
+            , &Dealer::cardDealt
+            , this
+            , &GameWindow::displayCard);
+
+//    connect();
 }
 
 GameWindow::~GameWindow()
@@ -218,12 +215,27 @@ GameWindow::~GameWindow()
 
 void GameWindow::drawPicture(
     QLabel *label
-    , const QString& fileName
-    , int posX, int posY
-    , int width, int height)
+    , const QString& fileName)
 {
     label->setPixmap(QPixmap(fileName)); // Replace with your own image
     label->setScaledContents(true);
-    label->setGeometry(posX, posY, width, height);
+    label->setGeometry(label->x(), label->y()
+                       , label->width(), label->height());
+}
+
+void GameWindow::displayCard(const QString& receiver // Player0
+                 , const QString& cardName // SuitName
+                 , int cardNum)
+{
+    QString place =  receiver + "CardLabel" + QString::number(cardNum);
+    auto cardLabel = m_participantsSetups[receiver]->findChild<QLabel*>(place);
+
+    if(cardLabel == nullptr) qDebug() << place << ": no such value";
+    QString cardToDisplay = ":/images/resources/images/" + cardName + ".png";
+    drawPicture(cardLabel, cardToDisplay);
+}
+
+void GameWindow::displayScore(const QString& receiver, int score)
+{
 }
 

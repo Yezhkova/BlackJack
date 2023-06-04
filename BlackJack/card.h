@@ -2,6 +2,8 @@
 
 #include <string>
 #include <map>
+#include <QString>
+
 class Card
 {
 public:
@@ -33,8 +35,8 @@ public:
         return m_suit;
     }
 
-    std::string getName() const {
-        return m_name;
+    QString getName() const {
+        return QString::fromStdString(m_suit+m_name);
     }
 
     int getNumber() const {
@@ -45,6 +47,7 @@ private:
     std::string m_suit;
     std::string m_name;
     int m_number;
+
 
 public:
     static std::map<std::string, int> cards;

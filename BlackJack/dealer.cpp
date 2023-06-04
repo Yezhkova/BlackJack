@@ -1,6 +1,6 @@
 #include "dealer.h"
 
-Dealer::Dealer()
+Dealer::Dealer(): Participant(nullptr, "Dealer")
 {
     makeDeck();
 }
@@ -27,13 +27,14 @@ void Dealer::dealCards(Participant& participant, int numberOfCards)
         int pickedCardIdx = rand() % m_deck.size();
         auto it = m_deck.begin();
         std::advance(it, pickedCardIdx);
-
+        emit cardDealt(participant.getName()
+                       , it->getName()
+                       , participant.getHand().size());
         //initial dealing
         if(numberOfCards == 2 && it->getName()=="Ace")
         {
             participant.setSoft(true);
         }
-
         participant.takeCard(*it);
         m_deck.erase(it);
     }

@@ -3,15 +3,43 @@
 #include "card.h"
 #include <vector>
 #include <QDebug>
+#include <QObject>
 
-class Participant
+class Participant: public QObject
 {
-public:
-    Participant()
-    {
-    };
 
-    std::vector<Card> const getHand()
+    Q_OBJECT
+
+public:
+    explicit Participant(QObject *parent = nullptr, QString name = "")
+        : QObject(parent)
+        , m_name(name)
+        {};
+    Participant(const Participant& p)
+        : QObject(p.parent())
+        , m_name(p.m_name)
+        {};
+    Participant(Participant&& p) noexcept
+        : QObject(p.parent())
+        , m_name(p.m_name)
+        {};
+
+//    Participant(Participant&& p)
+//        : m_hand(p.m_hand)
+//        , m_score(p.m_score)
+//        , m_is_user(p.m_is_user)
+//        , m_is_dealer(p.m_is_dealer)
+//        , m_winner(p.m_winner)
+//        , m_has_blackjack(p.m_has_blackjack)
+//        , m_is_bust(p.m_is_bust)
+//        , m_is_active(p.m_is_active)
+//        , m_is_soft(p.m_is_soft)
+//    {
+//    };
+
+//    ~Participant(){};
+
+    std::vector<Card>& getHand()
     {
         return m_hand;
     }
@@ -95,6 +123,19 @@ public:
         m_is_bust = bust;
     }
 
+    const QString& getName() const
+    {
+        return m_name;
+    }
+
+    void setName(const QString& name)
+    {
+        m_name = name;
+    }
+
+signals:
+    void scoreUpdated(int score);
+
 private:
     std::vector<Card> m_hand;
     int m_score = 0;
@@ -105,6 +146,7 @@ private:
     bool m_is_bust = false;
     bool m_is_active = true;
     bool m_is_soft = false;
+    QString m_name;
 
 public:
     static int winScore;

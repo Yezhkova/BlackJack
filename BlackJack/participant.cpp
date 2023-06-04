@@ -5,6 +5,7 @@ int Participant::winScore = 21;
 void Participant::takeCard(const Card& card)
 {
     m_hand.push_back(card);
+    QString cardName = card.getName();
     m_score += card.getNumber();
     //        qDebug() << m_hand.cbegin()->getName() << " taken. Score: " << m_score;
     if(m_score > winScore) {
@@ -21,7 +22,7 @@ void Participant::takeCard(const Card& card)
             // emit is bust;
         }
     }
-    // emit display score
+//    emit scoreUpdated(m_score);
     //        qDebug() << "Score after levelling: " << m_score;
 }
 
