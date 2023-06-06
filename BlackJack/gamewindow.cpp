@@ -100,10 +100,7 @@ GameWindow::GameWindow(MainWindow *parent, int playersNum) :
             handLabel->setObjectName(QString("Player%1CardLabel%2").arg(i).arg(card));
             handLabel->setGeometry(0 + handPositionX, 0 + handPositionY, Card::cardWidth, Card::cardHeight);
 //            if(card < 4){
-//            drawPicture(handLabel
-//                        , CardBackPicPath
-//                        , 0 + handPositionX, 0 + handPositionY
-//                        , Card::cardWidth, Card::cardHeight);
+//            drawPicture(handLabel, CardBackPicPath);
 //            }
             handPositionX += 10;
             handPositionY += 20;
@@ -160,7 +157,10 @@ GameWindow::GameWindow(MainWindow *parent, int playersNum) :
     m_playButton->setGeometry(userActionsX, betBoxY+150, buttonWidth, buttonHeight);
     m_playButton->setStyleSheet(smallerFont);
     m_playButton->setEnabled(true);
-    connect(m_playButton, &QPushButton::clicked, &m_game, &GameProcess::playRound);
+
+    // TODO difference between released and clicked
+
+    connect(m_playButton, &QPushButton::released, &m_game, &GameProcess::playRound);
 
     QGroupBox* groupBox = new QGroupBox(this);
     groupBox->setObjectName("DealerBox");
@@ -193,9 +193,9 @@ GameWindow::GameWindow(MainWindow *parent, int playersNum) :
         QLabel *handLabel = new QLabel(groupBox);
         handLabel->setObjectName(QString("DealerCardLabel%1").arg(card));
         handLabel->setGeometry(0 + handPositionX, handPositionY, Card::cardWidth, Card::cardHeight);
-        if(card < 3){
-            drawPicture(handLabel, CardBackPicPath);
-        }
+//        if(card < 3){
+//            drawPicture(handLabel, CardBackPicPath);
+//        }
         handPositionX += 20;
     }
     m_participantsSetups["Dealer"] = groupBox;
@@ -232,6 +232,11 @@ void GameWindow::displayCard(const QString& receiver // Player0
 
     if(cardLabel == nullptr) qDebug() << place << ": no such value";
     QString cardToDisplay = ":/images/resources/images/" + cardName + ".png";
+    cardLabel->setPixmap(QPixmap(cardToDisplay)); // Replace with your own image
+    cardLabel->setScaledContents(true);
+    cardLabel->setGeometry(cardLabel->x(), cardLabel->y()
+                       , cardLabel->width(), cardLabel->height());
+
     drawPicture(cardLabel, cardToDisplay);
 }
 

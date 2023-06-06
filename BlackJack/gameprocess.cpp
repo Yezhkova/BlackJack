@@ -39,8 +39,9 @@ void GameProcess::playRound()
             // palyer is human (user)
             else
             {
-                while(player.isActive())
-                {
+//                while(player.isActive())
+//                {
+                    qDebug()<< "Log!!";
                     //                if(hit)
                     //                {
                     //                    m_dealer.dealCards(player, 1);
@@ -49,7 +50,7 @@ void GameProcess::playRound()
                     //                {
                     //                    player.setActive(false);
                     //                }
-                }
+//                }
             }
 
             int evaluate = m_dealer.compareScore(player);
