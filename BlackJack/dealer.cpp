@@ -57,46 +57,50 @@ void Dealer::checkCardAmount()
     }
 }
 
-int Dealer::compareScore(Participant *participant)
+int Dealer::compareScore(Player *player)
 {
-    qDebug() << participant->getName();
-    if(participant->isBust())
+    if(player->isBust())
     {
-        emit foundStatus(participant, ":/images/resources/images/busted.png");
-        emit foundTextStatus(participant, "loses bet");
+        emit foundStatus(player, ":/images/resources/images/bustStatus.png");
+        emit foundTextStatus(player, "loses bet");
     }
-    else if(participant->hasBlackjack())
+    else if(player->hasBlackjack())
     {
         if(this->hasBlackjack())
         {
-            emit foundTextStatus(participant, "loses bet");
+            emit foundTextStatus(player, "loses bet");
+            player->loseMoney(player->getBet());
         }
         else{
-            emit foundStatus(participant, ":/images/resources/images/blackjackStatus.png");
-            emit foundTextStatus(participant, "wins bet");
+            emit foundStatus(player, ":/images/resources/images/blackjackStatus.png");
+            emit foundTextStatus(player, "wins bet");
+            player->winMoney(player->getBet());
         }
     }
-    else if(this->isBust() || (winScore - participant->getScore()) < (winScore - this->getScore()))
+    else if(this->isBust() || (winScore - player->getScore()) < (winScore - this->getScore()))
     {
-        participant->setWinner(true);
-        emit foundTextStatus(participant, "wins bet");
+        player->setWinner(true);
+        emit foundTextStatus(player, "wins bet");
+        player->winMoney(player->getBet());
         return 1;
     }
-    else if((winScore - participant->getScore()) > (winScore - this->getScore()))
+    else if((winScore - player->getScore()) > (winScore - this->getScore()))
     {
         this->setWinner(true);
-        emit foundTextStatus(participant, "loses bet");
+        emit foundTextStatus(player, "loses bet");
+        player->loseMoney(player->getBet());
         return -1;
     }
-    else if(participant->getScore() == this->getScore())
+    else if(player->getScore() == this->getScore())
     {
         if(this->hasBlackjack())
         {
-            emit foundTextStatus(participant, "loses bet");
+            emit foundTextStatus(player, "loses bet");
+            player->loseMoney(player->getBet());
             return -1;
         }
         else {
-            emit foundTextStatus(participant, "ends in a draw");
+            emit foundTextStatus(player, "ends in a draw");
         }
     }
 }

@@ -22,6 +22,7 @@ GameWindow::GameWindow(MainWindow *parent, int playersNum) :
     BackgroundMusicPath = ":/sounds/resources/sounds/cyber.wav";
     BackgroundPicPath = ":/images/resources/images/gameBgImg.jpg";
     CardBackPicPath = ":/images/resources/images/back1.jpg";
+    BlackJackPicPath = ":/images/resources/images/blackjackStatus.png";
 
     QRect screenGeometry = QGuiApplication::primaryScreen()->geometry();
     this->setFixedSize(m_globWidth, m_globHeight);
@@ -149,15 +150,14 @@ void GameWindow::setupPlayers(int playersNum)
 
         QLabel* imageStatusLabel = new QLabel(groupBox);
         imageStatusLabel->setObjectName(QString("Player%1ImageStatusLabel").arg(i));
-        int imageStatusLabelWidth = boxWidth;
-        int imageStatusLabelHeight = boxWidth/2.7;
+        int imageStatusLabelWidth = boxWidth-100;
+        int imageStatusLabelHeight = boxWidth/2;
         int imageStatusLabelX = initHandPositionX;
         int imageStatusLabelY = initHandPositionY;
         imageStatusLabel->setGeometry(imageStatusLabelX, imageStatusLabelY
                                       , imageStatusLabelWidth, imageStatusLabelHeight);
         connect(&m_game.getDealer(), &Dealer::foundStatus
                 , this, &GameWindow::displayStatus);
-
 
         m_participantsSetups[QString("Player%1").arg(i)] = groupBox;
     }
@@ -208,8 +208,8 @@ void GameWindow::setupDealer()
 
     QLabel* imageStatusLabel = new QLabel(groupBox);
     imageStatusLabel->setObjectName(QString("DealerImageStatusLabel"));
-    int imageStatusLabelWidth = dealerBoxWidth/2;
-    int imageStatusLabelHeight = imageStatusLabelWidth/2.5;
+    int imageStatusLabelWidth = dealerBoxWidth;
+    int imageStatusLabelHeight = imageStatusLabelWidth/2;
     int imageStatusLabelX = initHandPositionX;
     int imageStatusLabelY = initHandPositionY;
     imageStatusLabel->setGeometry(imageStatusLabelX, imageStatusLabelY
@@ -298,10 +298,13 @@ void GameWindow::drawPicture(
     QLabel *label
     , const QString& fileName)
 {
-    label->setPixmap(QPixmap(fileName));
+    QPixmap pixmap(fileName);
     label->setScaledContents(true);
-    label->setGeometry(label->x(), label->y()
-                       , label->width(), label->height());
+    QPixmap scaledPixmap = pixmap.scaled(label->x(), label->y(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    label->setPixmap(pixmap);
+
+//    label->setGeometry(label->x(), label->y()
+//                       , label->width(), label->height());
 }
 
 void GameWindow::displayCard(Participant *receiver, std::_List_iterator<Card> it)
@@ -311,11 +314,6 @@ void GameWindow::displayCard(Participant *receiver, std::_List_iterator<Card> it
 
     if(cardLabel == nullptr) qDebug() << place << ": no such value";
     QString cardToDisplay = ":/images/resources/images/" + it->getName() + ".png";
-    cardLabel->setPixmap(QPixmap(cardToDisplay));
-    cardLabel->setScaledContents(true);
-    cardLabel->setGeometry(cardLabel->x(), cardLabel->y()
-                       , cardLabel->width(), cardLabel->height());
-
     drawPicture(cardLabel, cardToDisplay);
 }
 
@@ -337,17 +335,9 @@ void GameWindow::displayStatus(Participant *receiver, const QString& filepath)
 {
     QString place =  receiver->getName() + "ImageStatusLabel";
     auto imgStatLabel = m_participantsSetups[receiver->getName()]->findChild<QLabel*>(place);
-    imgStatLabel->setPixmap(QString(filepath));
-    imgStatLabel->show();
-
-    QTimer timer;
-    timer.setInterval(2000); // 2 seconds
-    timer.setSingleShot(true); // Execute only once
-
-    // Connect the timeout signal of the QTimer to the slot that clears the label
-    connect(&timer, &QTimer::timeout, [&imgStatLabel]() {imgStatLabel->clear();});
-    // Start the timer
-    timer.start();
+    imgStatLabel->setScaledContents(true);
+    drawPicture(imgStatLabel, filepath);
+    QTimer::singleShot(2000, [imgStatLabel]() {imgStatLabel->clear();});
 }
 
 void GameWindow::displayTextStatus(Participant *receiver, const QString& text)

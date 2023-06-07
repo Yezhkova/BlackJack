@@ -1,6 +1,7 @@
 #pragma once
 
 #include "participant.h"
+#include "player.h"
 #include <list>
 
 class Dealer: public Participant
@@ -15,7 +16,7 @@ public:
 //    ~Dealer(){};
     void makeDeck();
     void checkCardAmount();
-    int compareScore(Participant *participant);
+    int compareScore(Player *participant);
     void act(Participant *participant) {
         while(participant->getScore() <= 17 && participant->isActive())
         {

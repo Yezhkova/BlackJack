@@ -75,6 +75,7 @@ private:
     QString BackgroundMusicPath;
     QString BackgroundPicPath;
     QString CardBackPicPath;
+    QString BlackJackPicPath;
 
 };
 
