@@ -28,9 +28,8 @@ public:
 //        event->accept();
     }
 
-    void drawPicture(
-        QLabel *label
-        , const QString& fileName);
+    void drawPicture(QLabel *label, const QString& fileName);
+    void drawAnimation(QLabel *label, const QString& fileName);
 
 public slots:
     void displayCard(Participant *receiver, std::_List_iterator<Card> it);
@@ -40,7 +39,9 @@ public slots:
     void displayStatus(Participant *receiver, const QString& filepath);
     void displayTextStatus(Participant *receiver, const QString& text);
     void results();
+
 signals:
+    void displayingCard();
 
 private:
     void setupBackground();
@@ -55,7 +56,9 @@ private:
     Ui::GameWindow *ui;
     MainWindow *m_parent;
     MusicThread *m_musicThread;
-//    MusicThread *effectsThread;
+    MusicThread *m_mouseThread;
+    MusicThread *m_cardThread;
+
     GameProcess m_game;
     int m_globWidth = 1280;
     int m_globHeight = 720;
@@ -73,6 +76,8 @@ private:
 
    // Sound file locations
     QString BackgroundMusicPath;
+    QString MouseMusicPath;
+    QString CardMusicPath;
     QString BackgroundPicPath;
     QString CardBackPicPath;
     QString BlackJackPicPath;

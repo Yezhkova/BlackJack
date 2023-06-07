@@ -16,7 +16,8 @@ public:
 //    ~Dealer(){};
     void makeDeck();
     void checkCardAmount();
-    int compareScore(Player *participant);
+    int compareScore(Player *player);
+    void compareScore(Participant *participant);
     void act(Participant *participant) {
         while(participant->getScore() <= 17 && participant->isActive())
         {

@@ -62,5 +62,6 @@
         <file>resources/sounds/tz.wav</file>
         <file>resources/sounds/ukulele.wav</file>
         <file>resources/sounds/cyber.wav</file>
+        <file>resources/sounds/t-ch.wav</file>
     </qresource>
 </RCC>

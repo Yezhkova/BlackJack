@@ -9,6 +9,7 @@
 #include "Stylesheet.h"
 #include <QStandardItemModel>
 #include <QTimer>
+#include <QPropertyAnimation>
 
 GameWindow::GameWindow(MainWindow *parent, int playersNum) :
     ui(new Ui::GameWindow),
@@ -20,6 +21,8 @@ GameWindow::GameWindow(MainWindow *parent, int playersNum) :
     this->setWindowTitle("Blackjack by Yezhkova");
 
     BackgroundMusicPath = ":/sounds/resources/sounds/cyber.wav";
+    MouseMusicPath = ":/sounds/resources/sounds/tz.wav";
+    CardMusicPath = ":/sounds/resources/sounds/t-ch.wav";
     BackgroundPicPath = ":/images/resources/images/gameBgImg.jpg";
     CardBackPicPath = ":/images/resources/images/back1.jpg";
     BlackJackPicPath = ":/images/resources/images/blackjackStatus.png";
@@ -53,6 +56,11 @@ void GameWindow::setupSound()
 {
     m_musicThread = new MusicThread(BackgroundMusicPath, -2);
     m_musicThread->start();
+    m_mouseThread = new MusicThread(MouseMusicPath, 1);
+    m_mouseThread->start();
+    m_cardThread = new MusicThread(CardMusicPath, 1);
+//    m_cardThread->start();
+
     m_soundControl = new QCheckBox(this);
     m_soundControl->setCheckState(Qt::Checked);
     m_soundControl->setText("Play background music");
@@ -128,6 +136,7 @@ void GameWindow::setupPlayers(int playersNum)
             QLabel *handLabel = new QLabel(groupBox);
             handLabel->setObjectName(QString("Player%1CardLabel%2").arg(i).arg(card));
             handLabel->setGeometry(0 + handPositionX, 0 + handPositionY, Card::cardWidth, Card::cardHeight);
+
             //            if(card < 4){
             //            drawPicture(handLabel, CardBackPicPath);
             //            }
@@ -252,7 +261,9 @@ void GameWindow::setupControl()
     m_hitButton->setEnabled(false);
     connect(m_hitButton, &QPushButton::released, &m_game.getDealer()
             , [this] {m_game.getDealer().dealCards(&m_game.getPlayers()[0], 1);});
-
+    connect(m_hitButton, &QPushButton::released, m_mouseThread, &MusicThread::run);
+//    connect(m_hitButton, &QPushButton::released,this,
+//            [this]{MusicThread *m = new MusicThread(MouseMusicPath, 1); m->run(); });
 
     m_standButton = new QPushButton("Stand", this);
     m_standButton->setGeometry(userActionsX, standY, buttonWidth, buttonHeight);
@@ -262,6 +273,11 @@ void GameWindow::setupControl()
             , [this] {m_game.getPlayers()[0].setActive(false);});
     connect(m_standButton, &QPushButton::released, m_hitButton, [this]{m_hitButton->setEnabled(false);});
     connect(m_standButton, &QPushButton::released, this, &GameWindow::results);
+    connect(m_standButton, &QPushButton::released, m_mouseThread, &MusicThread::run);
+
+//    connect(m_standButton, &QPushButton::released,this,
+//            [this]{MusicThread *m = new MusicThread(MouseMusicPath, 1); m->run(); });
+
 
     m_betBox = new QComboBox(this);
 
@@ -289,22 +305,49 @@ void GameWindow::setupControl()
     connect(&m_game, &GameProcess::roundStarted, this, [this]{ enableButton(m_playButton, false); });
     connect(&m_game, &GameProcess::roundStarted, this, [this]{ enableButton(m_hitButton, true); });
     connect(&m_game, &GameProcess::roundStarted, this, [this]{ enableButton(m_standButton, true); });
+    connect(m_playButton, &QPushButton::released, m_mouseThread, &MusicThread::run);
+
+//    connect(m_playButton, &QPushButton::released,this,
+//            [this]{MusicThread *m = new MusicThread(MouseMusicPath, 1); m->run(); });
+
 
     // TODO difference between released and clicked
 
 }
 
-void GameWindow::drawPicture(
-    QLabel *label
-    , const QString& fileName)
+void GameWindow::drawPicture(QLabel *label, const QString& fileName)
 {
     QPixmap pixmap(fileName);
     label->setScaledContents(true);
-    QPixmap scaledPixmap = pixmap.scaled(label->x(), label->y(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     label->setPixmap(pixmap);
+}
 
-//    label->setGeometry(label->x(), label->y()
-//                       , label->width(), label->height());
+void GameWindow::drawAnimation(QLabel *label, const QString& fileName)
+{
+//    QWidget window;
+//    QVBoxLayout layout(&window);
+
+//    QLabel picture;
+//    QPixmap pixmap(fileName);
+//    label->setScaledContents(true);
+//    label->setPixmap(pixmap);
+
+//    layout.addWidget(&picture);
+//    window.setLayout(&layout);
+//    window.setGeometry(100, 100, 300, 300);
+//    window.show();
+    drawPicture(label, fileName);
+    int startY = -label->height();  // Initial starting position (above the window)
+    int endY = label->y() + label->height();  // Desired stopping position (Y-coordinate)
+
+//    QPropertyAnimation animation(label, "pos");
+    QPropertyAnimation *animation = new QPropertyAnimation(label, "pos");
+    animation->setDuration(2000);  // Animation duration (in milliseconds)
+    animation->setStartValue(QPoint(label->x(), -label->height()));
+    animation->setEndValue(QPoint(label->x(), label->y()));
+    animation->setEasingCurve(QEasingCurve::InOutQuad);  // Optional easing curve for smoother animation
+    connect(animation, &QPropertyAnimation::valueChanged, [label]() {label->update(); });
+    animation->start();
 }
 
 void GameWindow::displayCard(Participant *receiver, std::_List_iterator<Card> it)
@@ -314,7 +357,10 @@ void GameWindow::displayCard(Participant *receiver, std::_List_iterator<Card> it
 
     if(cardLabel == nullptr) qDebug() << place << ": no such value";
     QString cardToDisplay = ":/images/resources/images/" + it->getName() + ".png";
-    drawPicture(cardLabel, cardToDisplay);
+    drawAnimation(cardLabel, cardToDisplay);
+//    drawPicture(cardLabel, cardToDisplay);
+    connect(this, &GameWindow::displayingCard, m_cardThread, &MusicThread::run);
+//    emit displayingCard();
 }
 
 void GameWindow::displayScore(Participant *receiver)
@@ -337,7 +383,7 @@ void GameWindow::displayStatus(Participant *receiver, const QString& filepath)
     auto imgStatLabel = m_participantsSetups[receiver->getName()]->findChild<QLabel*>(place);
     imgStatLabel->setScaledContents(true);
     drawPicture(imgStatLabel, filepath);
-    QTimer::singleShot(2000, [imgStatLabel]() {imgStatLabel->clear();});
+    QTimer::singleShot(3000, [imgStatLabel]() {imgStatLabel->clear();});
 }
 
 void GameWindow::displayTextStatus(Participant *receiver, const QString& text)
@@ -363,8 +409,14 @@ void GameWindow::checkPossibleBets(Player *player)
 
 void GameWindow::results()
 {
+    m_game.getDealer().compareScore(&m_game.getDealer());
     for(auto& player: m_game.getPlayers())
     {
         m_game.getDealer().compareScore(&player);
+        emit displayBalance(&player);
+    }
+    if(m_game.getPlayers()[0].getBalance() > 0)
+    {
+        m_playButton->setEnabled(true);
     }
 }

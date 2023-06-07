@@ -56,6 +56,17 @@ void Dealer::checkCardAmount()
         makeDeck();
     }
 }
+void Dealer::compareScore(Participant *participant)
+{
+    if(participant->isBust())
+    {
+        emit foundStatus(participant, ":/images/resources/images/bustStatus.png");
+    }
+    else if(participant->hasBlackjack())
+    {
+        emit foundStatus(participant, ":/images/resources/images/blackjackStatus.png");
+    }
+}
 
 int Dealer::compareScore(Player *player)
 {
