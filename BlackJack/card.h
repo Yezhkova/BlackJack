@@ -10,7 +10,7 @@ public:
     Card(std::string suit, std::string name, int num)
         : m_suit(suit)
         , m_name(name)
-        , m_number(num)
+        , m_cardScore(num)
         {
         };
 
@@ -39,14 +39,14 @@ public:
         return QString::fromStdString(m_suit+m_name);
     }
 
-    int getNumber() const {
-        return m_number;
+    int getCardScore() const {
+        return m_cardScore;
     }
 
 private:
     std::string m_suit;
     std::string m_name;
-    int m_number;
+    int m_cardScore;
 
 
 public:

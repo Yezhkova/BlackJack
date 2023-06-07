@@ -20,24 +20,34 @@ void Dealer::makeSuit(const std::string& suit)
     }
 }
 
-void Dealer::dealCards(Participant& participant, int numberOfCards)
+void Dealer::dealCards(Participant *participant, int numberOfCards)
 {
     for(int i = 0; i < numberOfCards; ++i)
     {
         int pickedCardIdx = rand() % m_deck.size();
         auto it = m_deck.begin();
         std::advance(it, pickedCardIdx);
-        emit cardDealt(participant.getName()
-                       , it->getName()
-                       , participant.getHand().size());
         //initial dealing
         if(numberOfCards == 2 && it->getName()=="Ace")
         {
-            participant.setSoft(true);
+            participant->setSoft(true);
         }
-        participant.takeCard(*it);
+        participant->takeCard(*it);
+        emit cardDealt(participant, it);
         m_deck.erase(it);
     }
+}
+bool Dealer::checkForBlackjack(Participant *participant)
+{
+    if(participant->getHand().size() == 2 && participant->getScore() == winScore)
+    {
+        participant->setBlackjack(true);
+        //        emit foundStatus(participant, ":/images/resources/images/blackjackStatus.png");
+        participant->setWinner(true);
+        participant->setActive(false);
+        return true;
+    }
+    return false;
 }
 
 void Dealer::checkCardAmount()
@@ -47,33 +57,46 @@ void Dealer::checkCardAmount()
     }
 }
 
-int Dealer::compareScore( Participant& participant)
+int Dealer::compareScore(Participant *participant)
 {
-    if(participant.getScore() > this->getScore() ||this->isBust())
+    qDebug() << participant->getName();
+    if(participant->isBust())
     {
-        participant.setWinner(true);
-        return 1;
+        emit foundStatus(participant, ":/images/resources/images/busted.png");
+        emit foundTextStatus(participant, "loses bet");
     }
-    if(participant.getScore() < this->getScore() || participant.isBust())
+    else if(participant->hasBlackjack())
     {
-        this->setWinner(true);
-        return -1;
-    }
-    if(participant.getScore() == this->getScore())
-    {
-        if(participant.hasBlackjack() && this->hasBlackjack())
-        {
-            participant.setWinner(false);
-            this->setWinner(false);
-            return 0;
-        }
-        if(participant.hasBlackjack())
-        {
-            return 1;
-        }
         if(this->hasBlackjack())
         {
+            emit foundTextStatus(participant, "loses bet");
+        }
+        else{
+            emit foundStatus(participant, ":/images/resources/images/blackjackStatus.png");
+            emit foundTextStatus(participant, "wins bet");
+        }
+    }
+    else if(this->isBust() || (winScore - participant->getScore()) < (winScore - this->getScore()))
+    {
+        participant->setWinner(true);
+        emit foundTextStatus(participant, "wins bet");
+        return 1;
+    }
+    else if((winScore - participant->getScore()) > (winScore - this->getScore()))
+    {
+        this->setWinner(true);
+        emit foundTextStatus(participant, "loses bet");
+        return -1;
+    }
+    else if(participant->getScore() == this->getScore())
+    {
+        if(this->hasBlackjack())
+        {
+            emit foundTextStatus(participant, "loses bet");
             return -1;
+        }
+        else {
+            emit foundTextStatus(participant, "ends in a draw");
         }
     }
 }

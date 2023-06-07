@@ -33,12 +33,23 @@ public:
         , const QString& fileName);
 
 public slots:
-    void displayCard(const QString& receiver
-                     , const QString& cardName
-                     , int cardNum);
-    void displayScore(const QString& receiver, int score);
-
+    void displayCard(Participant *receiver, std::_List_iterator<Card> it);
+    void displayScore(Participant *receiver);
+    void displayBalance(Player *receiver);
+    void enableButton(QPushButton *button, bool active);
+    void displayStatus(Participant *receiver, const QString& filepath);
+    void displayTextStatus(Participant *receiver, const QString& text);
+    void results();
 signals:
+
+private:
+    void setupBackground();
+    void setupSound();
+    void setupPlayers(int playersNum);
+    void setupPlayButton();
+    void setupDealer();
+    void setupControl();
+    void checkPossibleBets(Player *receiver);
 
 private:
     Ui::GameWindow *ui;

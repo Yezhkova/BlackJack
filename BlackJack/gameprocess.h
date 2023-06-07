@@ -30,6 +30,8 @@ public slots:
     void playRound();
 
 signals:
+    void roundStarted();
+    void betsMade(Player *player);
 
 private:
     Dealer m_dealer;

@@ -10,25 +10,28 @@ public:
     Player(QString name)
         : Participant(nullptr, name)
     {
-       setName(name);
+        setName(name);
     };
-    Player(const Player& p){
-       setName(p.getName());
-    };
-    Player(Player&& p) noexcept {
-       setName(p.getName());
-    };
-//    Player(Player&& p)
-//        : m_balance(p.m_balance)
-//        , m_bet(p.m_bet)
-//    {
-//    };
 
-//    ~Player(){};
-//    void setName(const QString& name)
-//    {
-//        m_name = name;
-//    }
+    Player(const Player& p){
+        setName(p.getName());
+    };
+
+    Player(Player&& p) noexcept {
+        setName(p.getName());
+    };
+
+    //    Player(Player&& p)
+    //        : m_balance(p.m_balance)
+    //        , m_bet(p.m_bet)
+    //    {
+    //    };
+
+    //    ~Player(){};
+    //    void setName(const QString& name)
+    //    {
+    //        m_name = name;
+    //    }
     void winMoney(int money)
     {
         m_balance += money;
@@ -37,20 +40,34 @@ public:
     void loseMoney(int money)
     {
         m_balance -= money;
-        if(m_balance == 0)
+        if(m_balance <= 0)
         {
             this->setActive(false);
         }
     }
 
-//    void makeBet()
-//    {
-//        m_bet = rand() % bets.size();
-//    }
+    void makeBet()
+    {
+        if(m_is_user)
+        {
+            return;
+        }
+        int idx = rand() % bets.size();
+        while(bets[idx] > m_balance)
+        {
+            --idx;
+        }
+        m_bet = bets[idx];
+    }
 
     int getBet()
     {
         return m_bet;
+    }
+
+    int getBalance()
+    {
+        return m_balance;
     }
 
 public slots:
@@ -61,7 +78,7 @@ public slots:
 
 private:
     int m_balance = 100;
-    int m_bet = rand() % bets.size();
+    int m_bet = 0;
 
 public:
     static std::array<int, 5> bets;

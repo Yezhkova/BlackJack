@@ -51,8 +51,6 @@ public:
 
     void takeCard(const Card& card);
 
-    bool checkForBlackjack();
-
     void setAsUser()
     {
         m_is_user = true;
@@ -133,12 +131,19 @@ public:
         m_name = name;
     }
 
+    void addScore(int score)
+    {
+        m_score += score;
+    }
+
 signals:
-    void scoreUpdated(int score);
 
 private:
     std::vector<Card> m_hand;
     int m_score = 0;
+    QString m_name;
+
+protected:
     bool m_is_user = false;
     bool m_is_dealer = false;
     bool m_winner = false;
@@ -146,7 +151,6 @@ private:
     bool m_is_bust = false;
     bool m_is_active = true;
     bool m_is_soft = false;
-    QString m_name;
 
 public:
     static int winScore;

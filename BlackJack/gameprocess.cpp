@@ -16,53 +16,28 @@ GameProcess::GameProcess(int playersNumber) : m_playersNum(playersNumber)
 
 void GameProcess::playRound()
 {
+    emit roundStarted();
     for(auto& player: m_players)
     {
-//        player.makeBet();
-        m_dealer.dealCards(player, 2);
+        player.makeBet();
+        emit betsMade(&player);
+        m_dealer.dealCards(&player, 2);
     }
 
-    m_dealer.dealCards(m_dealer, 2);
-    m_dealer.checkForBlackjack();
-    m_dealer.act(m_dealer);
+    m_dealer.dealCards(&m_dealer, 2);
+    m_dealer.checkForBlackjack(&m_dealer);
+    m_dealer.act(&m_dealer);
     m_dealer.checkCardAmount();
 
     for(auto& player: m_players)
     {
-        player.checkForBlackjack();
+        m_dealer.checkForBlackjack(&player);
         if(!player.hasBlackjack())
         {
             if(!player.is_user())
             {
-                m_dealer.act(player);
+                m_dealer.act(&player);
             }
-            // palyer is human (user)
-            else
-            {
-//                while(player.isActive())
-//                {
-                    qDebug()<< "Log!!";
-                    //                if(hit)
-                    //                {
-                    //                    m_dealer.dealCards(player, 1);
-                    //                }
-                    //                else if(stand)
-                    //                {
-                    //                    player.setActive(false);
-                    //                }
-//                }
-            }
-
-            int evaluate = m_dealer.compareScore(player);
-            if(evaluate > 0)
-            {
-                player.winMoney(winCoeff * player.getBet());
-            }
-            else if(evaluate < 0)
-            {
-                player.loseMoney(player.getBet());
-            }
-            // emit blackjack
         }
     }
 }

@@ -24,4 +24,6 @@ QString checkBoxStyle = "QCheckBox::indicator"
 
 QString greaterFont = "font-size: 20px; color: white; font-weight: bold;";
 
+QString greaterYellowFont = "font-size: 20px; color: yellow; font-weight: bold;";
+
 QString smallerFont = "font-size: 15px; font-weight: bold;";

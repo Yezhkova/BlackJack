@@ -5,9 +5,7 @@ int Participant::winScore = 21;
 void Participant::takeCard(const Card& card)
 {
     m_hand.push_back(card);
-    QString cardName = card.getName();
-    m_score += card.getNumber();
-    //        qDebug() << m_hand.cbegin()->getName() << " taken. Score: " << m_score;
+    m_score += card.getCardScore();
     if(m_score > winScore) {
         if(m_is_soft)
         {
@@ -16,24 +14,9 @@ void Participant::takeCard(const Card& card)
         }
         else
         {
-            m_is_bust = false;
-            m_winner = false;
+            m_is_bust = true;
             m_is_active = false;
-            // emit is bust;
         }
     }
-//    emit scoreUpdated(m_score);
-    //        qDebug() << "Score after levelling: " << m_score;
 }
 
-bool Participant::checkForBlackjack()
-{
-    if(m_hand.size() == 2 && m_score == winScore)
-    {
-        m_has_blackjack = true;
-        m_winner = true;
-        m_is_active = false;
-        return true;
-    }
-    return false;
-}
