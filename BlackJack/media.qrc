@@ -54,7 +54,6 @@
         <file>resources/images/SpadesTen.png</file>
         <file>resources/images/SpadesThree.png</file>
         <file>resources/images/SpadesTwo.png</file>
-        <file>BlackJack.pro</file>
         <file>resources/images/blackjackStatus.png</file>
         <file>resources/images/bustStatus.png</file>
     </qresource>

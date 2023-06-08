@@ -117,14 +117,13 @@ void GameWindow::setupPlayers(int playersNum)
         balanceTextLabel->setStyleSheet(greaterFont);
         balanceTextLabel->setGeometry(balanceTextX, balanceTextY, balanceTextWidth, balanceTextHeight);
 
-        QLabel *balanceLabel = new QLabel(0, groupBox);
+        QLabel *balanceLabel = new QLabel("100", groupBox);
         balanceLabel->setObjectName(QString("Player%1BalanceLabel").arg(i));
         int balanceWidth = 50;
         int balanceX = balanceTextX + balanceTextWidth;
         balanceLabel->setStyleSheet(greaterYellowFont);
-        balanceLabel->setText("0");
         balanceLabel->setGeometry(balanceX, balanceTextY, balanceWidth, balanceTextHeight);
-        connect(&m_game, &GameProcess::betsMade, this, &GameWindow::displayBalance);
+        connect(&m_game.getDealer(), &Dealer::balanceUpdated, this, &GameWindow::displayBalance);
 
         int initHandPositionX = 30;
         int initHandPositionY = balanceTextY + balanceTextHeight + 5;
@@ -324,23 +323,11 @@ void GameWindow::drawPicture(QLabel *label, const QString& fileName)
 
 void GameWindow::drawAnimation(QLabel *label, const QString& fileName)
 {
-//    QWidget window;
-//    QVBoxLayout layout(&window);
+    qDebug() << fileName;
+    QPixmap *tmp = new QPixmap(fileName);
+    if(tmp == nullptr)     qDebug() << "image not found!!!";
 
-//    QLabel picture;
-//    QPixmap pixmap(fileName);
-//    label->setScaledContents(true);
-//    label->setPixmap(pixmap);
-
-//    layout.addWidget(&picture);
-//    window.setLayout(&layout);
-//    window.setGeometry(100, 100, 300, 300);
-//    window.show();
     drawPicture(label, fileName);
-    int startY = -label->height();  // Initial starting position (above the window)
-    int endY = label->y() + label->height();  // Desired stopping position (Y-coordinate)
-
-//    QPropertyAnimation animation(label, "pos");
     QPropertyAnimation *animation = new QPropertyAnimation(label, "pos");
     animation->setDuration(2000);  // Animation duration (in milliseconds)
     animation->setStartValue(QPoint(label->x(), -label->height()));

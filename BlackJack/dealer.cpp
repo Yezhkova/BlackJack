@@ -74,18 +74,18 @@ int Dealer::compareScore(Player *player)
     {
         emit foundStatus(player, ":/images/resources/images/bustStatus.png");
         emit foundTextStatus(player, "loses bet");
+        player->loseMoney(player->getBet());
     }
     else if(player->hasBlackjack())
     {
         if(this->hasBlackjack())
         {
-            emit foundTextStatus(player, "loses bet");
-            player->loseMoney(player->getBet());
+            emit foundTextStatus(player, "ends in a draw");
         }
         else{
             emit foundStatus(player, ":/images/resources/images/blackjackStatus.png");
             emit foundTextStatus(player, "wins bet");
-            player->winMoney(player->getBet());
+            player->winMoney(1.5 * player->getBet());
         }
     }
     else if(this->isBust() || (winScore - player->getScore()) < (winScore - this->getScore()))
@@ -114,5 +114,7 @@ int Dealer::compareScore(Player *player)
             emit foundTextStatus(player, "ends in a draw");
         }
     }
+
+    emit balanceUpdated(player);
 }
 

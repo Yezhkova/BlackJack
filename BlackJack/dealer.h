@@ -35,6 +35,7 @@ signals:
     void foundStatus(Participant *participant, const QString& filepath);
     void foundTextStatus (Participant *participant, const QString& text);
     void participantActive(Participant *participant, bool active);
+    void balanceUpdated(Player *receiver);
 private:
     void makeSuit(const std::string& suit);
 
