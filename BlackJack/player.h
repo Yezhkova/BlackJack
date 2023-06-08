@@ -21,17 +21,6 @@ public:
         setName(p.getName());
     };
 
-    //    Player(Player&& p)
-    //        : m_balance(p.m_balance)
-    //        , m_bet(p.m_bet)
-    //    {
-    //    };
-
-    //    ~Player(){};
-    //    void setName(const QString& name)
-    //    {
-    //        m_name = name;
-    //    }
     void winMoney(int money)
     {
         m_balance += money;

@@ -32,13 +32,15 @@ public:
     void drawAnimation(QLabel *label, const QString& fileName);
 
 public slots:
-    void displayCard(Participant *receiver, std::_List_iterator<Card> it);
-    void displayScore(Participant *receiver);
+    void displayCard(Participant *receiver, const QString& cardName);
+    void displayScore(Participant *receiver,const QString& cardName, bool flag);
     void displayBalance(Player *receiver);
     void enableButton(QPushButton *button, bool active);
     void displayStatus(Participant *receiver, const QString& filepath);
     void displayTextStatus(Participant *receiver, const QString& text);
+    void deletePlayer(Player *player);
     void results();
+    void clearAll();
 
 signals:
     void displayingCard();
@@ -56,7 +58,7 @@ private:
     Ui::GameWindow *ui;
     MainWindow *m_parent;
     MusicThread *m_musicThread;
-    MusicThread *m_mouseThread;
+    MusicThread *m_mouseSoundThread;
     MusicThread *m_cardThread;
 
     GameProcess m_game;

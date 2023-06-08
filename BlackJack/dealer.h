@@ -19,7 +19,7 @@ public:
     int compareScore(Player *player);
     void compareScore(Participant *participant);
     void act(Participant *participant) {
-        while(participant->getScore() <= 17 && participant->isActive())
+        while(participant->getScore() < 17 && participant->isActive())
         {
             dealCards(participant, 1);
         }
@@ -31,11 +31,13 @@ public slots:
 
 signals:
 
-    void cardDealt(Participant *receiver, std::_List_iterator<Card> it);
+    void cardDealt(Participant *receiver, const QString& cardName, bool flag);
     void foundStatus(Participant *participant, const QString& filepath);
     void foundTextStatus (Participant *participant, const QString& text);
     void participantActive(Participant *participant, bool active);
     void balanceUpdated(Player *receiver);
+    void playerDeleted(Player *receiver);
+
 private:
     void makeSuit(const std::string& suit);
 

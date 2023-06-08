@@ -1,13 +1,11 @@
 <RCC>
     <qresource prefix="/images">
-        <file>resources/images/playtech.jpg</file>
-        <file>resources/images/gameBgImg.jpg</file>
-        <file>resources/images/back1.jpg</file>
         <file>resources/images/ClubsAce.png</file>
         <file>resources/images/ClubsEight.png</file>
         <file>resources/images/ClubsFive.png</file>
         <file>resources/images/ClubsFour.png</file>
         <file>resources/images/ClubsJack.png</file>
+        <file>resources/images/ClubsKing.png</file>
         <file>resources/images/ClubsNine.png</file>
         <file>resources/images/ClubsQueen.png</file>
         <file>resources/images/ClubsSeven.png</file>
@@ -54,13 +52,16 @@
         <file>resources/images/SpadesTen.png</file>
         <file>resources/images/SpadesThree.png</file>
         <file>resources/images/SpadesTwo.png</file>
+        <file>resources/images/back1.png</file>
         <file>resources/images/blackjackStatus.png</file>
         <file>resources/images/bustStatus.png</file>
+        <file>resources/images/gameBgImg.jpg</file>
+        <file>resources/images/playtech.jpg</file>
     </qresource>
     <qresource prefix="/sounds">
-        <file>resources/sounds/tz.wav</file>
-        <file>resources/sounds/ukulele.wav</file>
         <file>resources/sounds/cyber.wav</file>
         <file>resources/sounds/t-ch.wav</file>
+        <file>resources/sounds/tz.wav</file>
+        <file>resources/sounds/ukulele.wav</file>
     </qresource>
 </RCC>

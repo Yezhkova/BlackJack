@@ -33,7 +33,12 @@ void Dealer::dealCards(Participant *participant, int numberOfCards)
             participant->setSoft(true);
         }
         participant->takeCard(*it);
-        emit cardDealt(participant, it);
+        if(numberOfCards == 2 && participant->getName()=="Dealer" && i == 1) {
+            emit cardDealt(participant, "back1", false);
+        }
+        else{
+            emit cardDealt(participant, it->getName(), true);
+        }
         m_deck.erase(it);
     }
 }
@@ -56,6 +61,7 @@ void Dealer::checkCardAmount()
         makeDeck();
     }
 }
+
 void Dealer::compareScore(Participant *participant)
 {
     if(participant->isBust())
@@ -75,6 +81,9 @@ int Dealer::compareScore(Player *player)
         emit foundStatus(player, ":/images/resources/images/bustStatus.png");
         emit foundTextStatus(player, "loses bet");
         player->loseMoney(player->getBet());
+        if(player->getBalance() <= 0) {
+            emit playerDeleted(player);
+        }
     }
     else if(player->hasBlackjack())
     {
@@ -100,6 +109,9 @@ int Dealer::compareScore(Player *player)
         this->setWinner(true);
         emit foundTextStatus(player, "loses bet");
         player->loseMoney(player->getBet());
+        if(player->getBalance() <= 0) {
+            emit playerDeleted(player);
+        }
         return -1;
     }
     else if(player->getScore() == this->getScore())
@@ -108,6 +120,9 @@ int Dealer::compareScore(Player *player)
         {
             emit foundTextStatus(player, "loses bet");
             player->loseMoney(player->getBet());
+            if(player->getBalance() <= 0) {
+                emit playerDeleted(player);
+            }
             return -1;
         }
         else {

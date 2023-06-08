@@ -136,6 +136,16 @@ public:
         m_score += score;
     }
 
+    void resetScore()
+    {
+        m_score = 0;
+    }
+
+    void resetHand()
+    {
+        m_hand.clear();
+    }
+
 signals:
 
 private:

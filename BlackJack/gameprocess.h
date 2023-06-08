@@ -28,10 +28,12 @@ public:
 
 public slots:
     void playRound();
+    void goOnRound();
 
 signals:
     void roundStarted();
-    void betsMade(Player *player);
+    void roundFinished();
+//    void betsMade(Player *player);
 
 private:
     Dealer m_dealer;
