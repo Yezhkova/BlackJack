@@ -5,8 +5,6 @@ double GameProcess::winCoeff = 1.5;
 
 GameProcess::GameProcess(int playersNumber) : m_playersNum(playersNumber)
 {
-    //    qDebug() << "playersNumber = " << playersNumber << '\n';
-
     for(int i = 0; i < playersNumber; ++i){
         Player p(QString("Player%1").arg(i));
         m_players.push_back(p);

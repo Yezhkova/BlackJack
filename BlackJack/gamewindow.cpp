@@ -305,10 +305,6 @@ void GameWindow::drawPicture(QLabel *label, const QString& fileName)
 
 void GameWindow::drawAnimation(QLabel *label, const QString& fileName)
 {
-    qDebug() << fileName;
-    QPixmap *tmp = new QPixmap(fileName);
-    if(tmp == nullptr)     qDebug() << "image not found!!!";
-
     drawPicture(label, fileName);
     QPropertyAnimation *animation = new QPropertyAnimation(label, "pos");
     animation->setDuration(1000);  // Animation duration (in milliseconds)
