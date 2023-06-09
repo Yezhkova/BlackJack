@@ -24,21 +24,6 @@ public:
         , m_name(p.m_name)
         {};
 
-//    Participant(Participant&& p)
-//        : m_hand(p.m_hand)
-//        , m_score(p.m_score)
-//        , m_is_user(p.m_is_user)
-//        , m_is_dealer(p.m_is_dealer)
-//        , m_winner(p.m_winner)
-//        , m_has_blackjack(p.m_has_blackjack)
-//        , m_is_bust(p.m_is_bust)
-//        , m_is_active(p.m_is_active)
-//        , m_is_soft(p.m_is_soft)
-//    {
-//    };
-
-//    ~Participant(){};
-
     std::vector<Card>& getHand()
     {
         return m_hand;
@@ -71,16 +56,6 @@ public:
         return m_is_dealer;
     }
 
-    bool isWinner()
-    {
-        return m_winner;
-    }
-
-    void setWinner(bool win)
-    {
-        m_winner = win;
-    }
-
     bool isActive()
     {
         return m_is_active;
@@ -89,6 +64,16 @@ public:
     void setActive(bool active)
     {
         m_is_active = active;
+    }
+
+    bool canPlay()
+    {
+        return m_can_play;
+    }
+
+    void setCanPlay(bool can)
+    {
+        m_can_play = can;
     }
 
     bool isSoft()
@@ -146,6 +131,11 @@ public:
         m_hand.clear();
     }
 
+    void resetCanPlay()
+    {
+        m_can_play = true;
+    }
+
 signals:
 
 private:
@@ -156,11 +146,11 @@ private:
 protected:
     bool m_is_user = false;
     bool m_is_dealer = false;
-    bool m_winner = false;
     bool m_has_blackjack = false;
     bool m_is_bust = false;
     bool m_is_active = true;
     bool m_is_soft = false;
+    bool m_can_play = true;
 
 public:
     static int winScore;

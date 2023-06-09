@@ -32,13 +32,12 @@ public:
     void drawAnimation(QLabel *label, const QString& fileName);
 
 public slots:
-    void displayCard(Participant *receiver, const QString& cardName);
+    void displayCard(Participant *receiver, const QString& cardName, bool flag, bool animate);
     void displayScore(Participant *receiver,const QString& cardName, bool flag);
     void displayBalance(Player *receiver);
     void enableButton(QPushButton *button, bool active);
     void displayStatus(Participant *receiver, const QString& filepath);
     void displayTextStatus(Participant *receiver, const QString& text);
-    void deletePlayer(Player *player);
     void results();
     void clearAll();
 

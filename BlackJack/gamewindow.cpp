@@ -36,6 +36,7 @@ GameWindow::GameWindow(MainWindow *parent, int playersNum) :
     setupBackground();
     setupSound();
     connect(&m_game, &GameProcess::roundStarted, this, &GameWindow::clearAll);
+    connect(&m_game, &GameProcess::roundFinished, this, &GameWindow::results);
     setupPlayers(playersNum);
     setupControl();
     setupDealer();
@@ -125,7 +126,6 @@ void GameWindow::setupPlayers(int playersNum)
         balanceLabel->setStyleSheet(greaterYellowFont);
         balanceLabel->setGeometry(balanceX, balanceTextY, balanceWidth, balanceTextHeight);
         connect(&m_game.getDealer(), &Dealer::balanceUpdated, this, &GameWindow::displayBalance);
-        connect(&m_game.getDealer(), &Dealer::playerDeleted, this, &GameWindow::deletePlayer);
 
         int initHandPositionX = 30;
         int initHandPositionY = balanceTextY + balanceTextHeight + 5;
@@ -194,7 +194,7 @@ void GameWindow::setupDealer()
     scoreLabel->setStyleSheet(greaterYellowFont);
     scoreLabel->setText("0");
     scoreLabel->setGeometry(scoreX + nameWidth, scoreY, scoreWidth, scoreHeight);
-//    connect(&m_game.getDealer(), &Dealer::cardDealt, this, &GameWindow::displayScore);
+    //    connect(&m_game.getDealer(), &Dealer::cardDealt, this, &GameWindow::displayScore);
 
     int initHandPositionX = 0;
     int initHandPositionY = scoreY + scoreHeight+10;
@@ -212,8 +212,8 @@ void GameWindow::setupDealer()
 
     QLabel* imageStatusLabel = new QLabel(groupBox);
     imageStatusLabel->setObjectName(QString("DealerImageStatusLabel"));
-    int imageStatusLabelWidth = dealerBoxWidth;
-    int imageStatusLabelHeight = imageStatusLabelWidth/2;
+    int imageStatusLabelWidth = Card::cardWidth+130;
+    int imageStatusLabelHeight =  Card::cardWidth+130/2;
     int imageStatusLabelX = initHandPositionX;
     int imageStatusLabelY = initHandPositionY;
     imageStatusLabel->setGeometry(imageStatusLabelX, imageStatusLabelY
@@ -224,10 +224,7 @@ void GameWindow::setupDealer()
 
     m_participantsSetups["Dealer"] = groupBox;
 
-    connect(&m_game.getDealer()
-            , &Dealer::cardDealt
-            , this
-            , &GameWindow::displayCard);
+    connect(&m_game.getDealer(), &Dealer::cardDealt, this, &GameWindow::displayCard);
 }
 
 void GameWindow::setupControl()
@@ -256,20 +253,20 @@ void GameWindow::setupControl()
     m_hitButton->setEnabled(false);
     connect(m_hitButton, &QPushButton::released, &m_game.getDealer()
             , [this] {m_game.getDealer().dealCards(&m_game.getPlayers()[0], 1);});
-    connect(m_hitButton, &QPushButton::released, m_mouseSoundThread, &MusicThread::run);
-    //    connect(m_hitButton, &QPushButton::released,this,
-    //            [this]{MusicThread *m = new MusicThread(MouseMusicPath, 1); m->run(); });
+    connect(m_hitButton, &QPushButton::pressed, m_mouseSoundThread, &MusicThread::run);
 
     m_standButton = new QPushButton("Stand", this);
     m_standButton->setGeometry(userActionsX, standY, buttonWidth, buttonHeight);
     m_standButton->setStyleSheet(smallerFont);
     m_standButton->setEnabled(false);
+    connect(m_standButton, &QPushButton::released, this, [this]{enableButton(m_hitButton, false);});
+    connect(m_standButton, &QPushButton::released, this, [this]{enableButton(m_standButton, false);});
     connect(m_standButton, &QPushButton::released, &m_game.getPlayers()[0]
             , [this] {m_game.getPlayers()[0].setActive(false);});
-//    connect(m_standButton, &QPushButton::released, m_hitButton, [this]{m_hitButton->setEnabled(false);});
+    connect(m_standButton, &QPushButton::released, this, [this]{m_betBox->setEnabled(true);});
     connect(m_standButton, &QPushButton::released, &m_game, &GameProcess::goOnRound);
-    connect(&m_game, &GameProcess::roundFinished, this, &GameWindow::results);
-    connect(m_standButton, &QPushButton::released, m_mouseSoundThread, &MusicThread::run);
+    connect(m_standButton, &QPushButton::pressed, m_mouseSoundThread, &MusicThread::run);
+    connect(m_standButton, &QPushButton::released, [this]{checkPossibleBets(&m_game.getPlayers()[0]);});
 
     m_betBox = new QComboBox(this);
 
@@ -294,7 +291,9 @@ void GameWindow::setupControl()
     m_playButton->setStyleSheet(smallerFont);
     m_playButton->setEnabled(true);
     connect(m_playButton, &QPushButton::released, &m_game, &GameProcess::playRound);
-    connect(m_playButton, &QPushButton::released, m_mouseSoundThread, &MusicThread::run);
+    connect(m_playButton, &QPushButton::pressed, m_mouseSoundThread, &MusicThread::run);
+    connect(m_playButton, &QPushButton::released, this, [this]{m_betBox->setEnabled(false);});
+
 }
 
 void GameWindow::drawPicture(QLabel *label, const QString& fileName)
@@ -312,22 +311,33 @@ void GameWindow::drawAnimation(QLabel *label, const QString& fileName)
 
     drawPicture(label, fileName);
     QPropertyAnimation *animation = new QPropertyAnimation(label, "pos");
-    animation->setDuration(2000);  // Animation duration (in milliseconds)
+    animation->setDuration(1000);  // Animation duration (in milliseconds)
     animation->setStartValue(QPoint(label->x(), -label->height()));
     animation->setEndValue(QPoint(label->x(), label->y()));
     animation->setEasingCurve(QEasingCurve::InOutQuad);  // Optional easing curve for smoother animation
-    connect(animation, &QPropertyAnimation::valueChanged, [label]() {label->update(); });
+    connect(animation, &QPropertyAnimation::valueChanged, [label] {label->update(); });
     animation->start();
 }
 
-void GameWindow::displayCard(Participant *receiver, const QString& cardName)
+void GameWindow::displayCard(Participant *receiver, const QString& cardName, bool flag, bool animate)
 {
     QString place =  receiver->getName() + "CardLabel" + QString::number(receiver->getHand().size());
     auto cardLabel = m_participantsSetups[receiver->getName()]->findChild<QLabel*>(place);
 
     if(cardLabel == nullptr) qDebug() << place << ": no such value";
-    QString cardToDisplay = ":/images/resources/images/" + cardName + ".png";
-    drawAnimation(cardLabel, cardToDisplay);
+    QString cardToDisplay;
+    if(flag){
+        cardToDisplay = ":/images/resources/images/" + cardName + ".png";
+    }
+    else{
+        cardToDisplay = ":/images/resources/images/back1.png";
+    }
+    if(animate){
+        drawAnimation(cardLabel, cardToDisplay);
+    }
+    else{
+        drawPicture(cardLabel, cardToDisplay);
+    }
     connect(this, &GameWindow::displayingCard, m_cardThread, &MusicThread::run);
     //    emit displayingCard();
 }
@@ -354,7 +364,7 @@ void GameWindow::displayStatus(Participant *receiver, const QString& filepath)
     auto imgStatLabel = m_participantsSetups[receiver->getName()]->findChild<QLabel*>(place);
     imgStatLabel->setScaledContents(true);
     drawPicture(imgStatLabel, filepath);
-    QTimer::singleShot(3000, [imgStatLabel]() {imgStatLabel->clear();});
+    QTimer::singleShot(3500, [imgStatLabel]() {imgStatLabel->clear();});
 }
 
 void GameWindow::displayTextStatus(Participant *receiver, const QString& text)
@@ -383,32 +393,32 @@ void GameWindow::results()
     m_game.getDealer().compareScore(&m_game.getDealer());
     for(auto& player: m_game.getPlayers())
     {
-        m_game.getDealer().compareScore(&player);
-        emit displayBalance(&player);
+        if(player.canPlay()){
+            m_game.getDealer().compareScore(&player);
+            emit displayBalance(&player);
+        }
     }
-    if(m_game.getPlayers()[0].getBalance() > 0)
+    if(m_game.getPlayers()[0].getBalance() == 0)
     {
+        displayStatus(&m_game.getPlayers()[0], ":/images/resources/images/gamover.png");
+        QTimer::singleShot(3000, []{exit(0);});
+    }
+    else{
         m_playButton->setEnabled(true);
     }
 }
 
-void GameWindow::deletePlayer(Player *player)
-{
-
-}
-
-
 void GameWindow::clearAll()
 {
+    checkPossibleBets(&m_game.getPlayers()[0]);
     m_playButton->setEnabled(false);
-    m_playButton->setText("New game!");
+    m_playButton->setText("New round!");
     m_hitButton->setEnabled(true);
     m_standButton->setEnabled(true);
 
     for(auto& e: m_participantsSetups)
     {
         QString playerName = e.first;
-
         QString scorePlace =  playerName + "ScoreLabel";
         auto scoreLabel = m_participantsSetups[playerName]->findChild<QLabel*>(scorePlace);
         scoreLabel->setText("0");
@@ -429,6 +439,7 @@ void GameWindow::clearAll()
 
     for(auto& player: m_game.getPlayers())
     {
+        displayBalance(&player);
         player.resetScore();
         player.setBlackjack(false);
         player.setBust(false);
@@ -444,3 +455,4 @@ void GameWindow::clearAll()
     m_game.getDealer().setActive(true);
 
 }
+

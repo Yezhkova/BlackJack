@@ -33,7 +33,7 @@ public slots:
 signals:
     void roundStarted();
     void roundFinished();
-//    void betsMade(Player *player);
+    void betsMade();
 
 private:
     Dealer m_dealer;

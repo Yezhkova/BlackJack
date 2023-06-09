@@ -13,7 +13,6 @@ public:
     Dealer();
     Dealer(const Dealer&) {};
     Dealer(Dealer&&) noexcept {};
-//    ~Dealer(){};
     void makeDeck();
     void checkCardAmount();
     int compareScore(Player *player);
@@ -31,12 +30,11 @@ public slots:
 
 signals:
 
-    void cardDealt(Participant *receiver, const QString& cardName, bool flag);
+    void cardDealt(Participant *receiver, const QString& cardName, bool flag, bool animate);
     void foundStatus(Participant *participant, const QString& filepath);
     void foundTextStatus (Participant *participant, const QString& text);
     void participantActive(Participant *participant, bool active);
     void balanceUpdated(Player *receiver);
-    void playerDeleted(Player *receiver);
 
 private:
     void makeSuit(const std::string& suit);

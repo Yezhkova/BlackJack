@@ -57,6 +57,7 @@
         <file>resources/images/bustStatus.png</file>
         <file>resources/images/gameBgImg.jpg</file>
         <file>resources/images/playtech.jpg</file>
+        <file>resources/images/gamover.png</file>
     </qresource>
     <qresource prefix="/sounds">
         <file>resources/sounds/cyber.wav</file>

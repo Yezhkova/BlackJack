@@ -19,9 +19,12 @@ void GameProcess::playRound()
     emit roundStarted();
     for(auto& player: m_players)
     {
-        player.makeBet();
-//        emit betsMade(&player);
-        m_dealer.dealCards(&player, 2);
+        if(player.canPlay())
+        {
+            player.makeBet();
+//            emit betsMade();
+            m_dealer.dealCards(&player, 2);
+        }
     }
 
     m_dealer.dealCards(&m_dealer, 2);
@@ -31,19 +34,22 @@ void GameProcess::playRound()
 void GameProcess::goOnRound()
 {
     QString secretCard = m_dealer.getHand().rbegin()->getName();
-    emit m_dealer.cardDealt(&m_dealer, secretCard, true);
+    emit m_dealer.cardDealt(&m_dealer, secretCard, true, false);
 
     m_dealer.act(&m_dealer);
     m_dealer.checkCardAmount();
 
     for(auto& player: m_players)
     {
-        m_dealer.checkForBlackjack(&player);
-        if(!player.hasBlackjack())
+        if(player.canPlay())
         {
-            if(!player.is_user())
+            m_dealer.checkForBlackjack(&player);
+            if(!player.hasBlackjack())
             {
-                m_dealer.act(&player);
+                if(!player.is_user())
+                {
+                    m_dealer.act(&player);
+                }
             }
         }
     }

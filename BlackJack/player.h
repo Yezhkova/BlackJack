@@ -31,7 +31,7 @@ public:
         m_balance -= money;
         if(m_balance <= 0)
         {
-            this->setActive(false);
+            m_can_play = false;
         }
     }
 
@@ -59,6 +59,12 @@ public:
         return m_balance;
     }
 
+    void resetBalance()
+    {
+        m_balance = 100;
+    }
+
+
 public slots:
     void setBet(int index)
     {
@@ -66,7 +72,7 @@ public slots:
     }
 
 private:
-    int m_balance = 100;
+    double m_balance = 100;
     int m_bet = 0;
 
 public:
