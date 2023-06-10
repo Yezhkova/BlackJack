@@ -26,6 +26,8 @@ GameWindow::GameWindow(MainWindow *parent, int playersNum) :
     BackgroundPicPath = ":/images/resources/images/gameBgImg.jpg";
     CardBackPicPath = ":/images/resources/images/back1.jpg";
     BlackJackPicPath = ":/images/resources/images/blackjackStatus.png";
+    GameoverPicPath = ":/images/resources/images/gamover.png";
+    RelativePicPath = ":/images/resources/images/";
 
     QRect screenGeometry = QGuiApplication::primaryScreen()->geometry();
     this->setFixedSize(m_globWidth, m_globHeight);
@@ -35,6 +37,7 @@ GameWindow::GameWindow(MainWindow *parent, int playersNum) :
 
     setupBackground();
     setupSound();
+    setupSkin();
     connect(&m_game, &GameProcess::roundStarted, this, &GameWindow::clearAll);
     connect(&m_game, &GameProcess::roundFinished, this, &GameWindow::results);
     setupPlayers(playersNum);
@@ -67,7 +70,10 @@ void GameWindow::setupSound()
     m_soundControl->setStyleSheet(checkBoxStyle);
     m_soundControl->setGeometry(50, 50, 350, 100);
     connect(m_soundControl, &QCheckBox::stateChanged, m_musicThread, &MusicThread::muteSound);
+}
 
+void GameWindow::setupSkin()
+{
     m_skinControl = new QComboBox(this);
     m_skinControl->addItem("Skin 1");
     m_skinControl->addItem("Skin 2");
@@ -76,6 +82,7 @@ void GameWindow::setupSound()
     m_skinControl->setCurrentIndex(0);
     connect(m_skinControl, &QComboBox::activated, this, &GameWindow::setSkin);
     m_skin = '1';
+
 }
 
 void GameWindow::setSkin(int index)
@@ -92,7 +99,7 @@ void GameWindow::setSkin(int index)
                 auto cardLabel = m_participantsSetups[playerName]->findChild<QLabel*>(place);
                 if(cardLabel == nullptr) qDebug() << place << ": no such value";
 
-                QString currentCard = ":/images/resources/images/"
+                QString currentCard = RelativePicPath
                                       + e.getHand()[card].getFullName()
                                       + m_skin + ".png";
                 drawPicture(cardLabel, currentCard);
@@ -106,7 +113,7 @@ void GameWindow::setSkin(int index)
         auto cardLabel = m_participantsSetups["Dealer"]->findChild<QLabel*>(place);
         if(cardLabel == nullptr) qDebug() << place << ": no such value";
 
-        QString currentCard = ":/images/resources/images/"
+        QString currentCard = RelativePicPath
                               +  m_game.getDealer().getHand()[card].getFullName()
                               + m_skin + ".png";
         drawPicture(cardLabel, currentCard);
@@ -348,7 +355,7 @@ void GameWindow::drawAnimation(QLabel *label, const QString& fileName)
 {
     drawPicture(label, fileName);
     QPropertyAnimation *animation = new QPropertyAnimation(label, "pos");
-    animation->setDuration(1000);  // Animation duration (in milliseconds)
+    animation->setDuration(1000);
     animation->setStartValue(QPoint(label->x(), -label->height()));
     animation->setEndValue(QPoint(label->x(), label->y()));
     animation->setEasingCurve(QEasingCurve::InOutQuad);  // Optional easing curve for smoother animation
@@ -362,7 +369,7 @@ void GameWindow::displayCard(Participant *receiver, const QString& cardName, boo
     auto cardLabel = m_participantsSetups[receiver->getName()]->findChild<QLabel*>(place);
 
     if(cardLabel == nullptr) qDebug() << place << ": no such value";
-    QString cardToDisplay = ":/images/resources/images/" + cardName + m_skin + ".png";
+    QString cardToDisplay = RelativePicPath + cardName + m_skin + ".png";
     if(animate){
         drawAnimation(cardLabel, cardToDisplay);
     }
@@ -429,7 +436,7 @@ void GameWindow::results()
     }
     if(m_game.getPlayers()[0].getBalance() == 0)
     {
-        displayStatus(&m_game.getPlayers()[0], ":/images/resources/images/gamover.png");
+        displayStatus(&m_game.getPlayers()[0], GameoverPicPath);
         QTimer::singleShot(3000, []{exit(0);});
     }
     else{

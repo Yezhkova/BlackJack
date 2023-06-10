@@ -34,4 +34,7 @@ private:
     Ui::MainWindow *ui;
     MusicThread *musicThread;
 
+    QString BackgroundMusicPath;
+    QString BackgroundPicPath;
+
 };

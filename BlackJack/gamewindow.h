@@ -50,6 +50,7 @@ private:
     void setupPlayButton();
     void setupDealer();
     void setupControl();
+    void setupSkin();
     void checkPossibleBets(Player *receiver);
 
 private:
@@ -81,6 +82,8 @@ private:
     QString BackgroundPicPath;
     QString CardBackPicPath;
     QString BlackJackPicPath;
+    QString GameoverPicPath;
+    QString RelativePicPath;
 
     QString m_skin;
 
