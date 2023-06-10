@@ -1,5 +1,7 @@
 #include "gameprocess.h"
+#include "qcoreapplication.h"
 #include "qdebug.h"
+#include <QTimer>
 
 double GameProcess::winCoeff = 1.5;
 
@@ -30,12 +32,14 @@ void GameProcess::playRound()
 
 void GameProcess::goOnRound()
 {
+    m_players[0].setActive(false);
+    qDebug() << m_dealer.getHand().rbegin()->getFullName();
     QString secretCard = m_dealer.getHand().rbegin()->getFullName();
     emit m_dealer.cardDealt(&m_dealer, secretCard, true, false);
-
+    qDebug() << "just displayed " << secretCard;
     m_dealer.act(&m_dealer);
     m_dealer.checkCardAmount();
-
+    emit continueRound();
     for(auto& player: m_players)
     {
         if(player.canPlay())
@@ -50,6 +54,6 @@ void GameProcess::goOnRound()
             }
         }
     }
-
+    qDebug() << "ready to finish round";
     emit roundFinished();
 }
