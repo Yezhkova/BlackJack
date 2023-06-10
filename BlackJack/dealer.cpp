@@ -74,7 +74,6 @@ void Dealer::compareScore(Participant *participant)
 
 void Dealer::compareScore(Player *player)
 {
-    qDebug() << "in compareScore - " << player->getName();
     if(player->isBust())
     {
         emit foundStatus(player, ":/images/resources/images/bustStatus.png");
