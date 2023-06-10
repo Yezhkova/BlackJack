@@ -37,7 +37,7 @@ signals:
     void balanceUpdated(Player *receiver);
 
 private:
-    void makeSuit(const std::string& suit);
+    void makeSuit(const QString& suit);
 
 private:
     std::list<Card> m_deck;

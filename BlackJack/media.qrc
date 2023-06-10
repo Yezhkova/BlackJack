@@ -1,108 +1,108 @@
 <RCC>
     <qresource prefix="/images">
-        <file>resources/images/ClubsAce.png</file>
+        <file>resources/images/ClubsAce1.png</file>
         <file>resources/images/ClubsAce2.png</file>
-        <file>resources/images/ClubsEight.png</file>
+        <file>resources/images/ClubsEight1.png</file>
         <file>resources/images/ClubsEight2.png</file>
-        <file>resources/images/ClubsFive.png</file>
+        <file>resources/images/ClubsFive1.png</file>
         <file>resources/images/ClubsFive2.png</file>
-        <file>resources/images/ClubsFour.png</file>
+        <file>resources/images/ClubsFour1.png</file>
         <file>resources/images/ClubsFour2.png</file>
-        <file>resources/images/ClubsJack.png</file>
+        <file>resources/images/ClubsJack1.png</file>
         <file>resources/images/ClubsJack2.png</file>
-        <file>resources/images/ClubsKing.png</file>
+        <file>resources/images/ClubsKing1.png</file>
         <file>resources/images/ClubsKing2.png</file>
-        <file>resources/images/ClubsNine.png</file>
+        <file>resources/images/ClubsNine1.png</file>
         <file>resources/images/ClubsNine2.png</file>
-        <file>resources/images/ClubsQueen.png</file>
+        <file>resources/images/ClubsQueen1.png</file>
         <file>resources/images/ClubsQueen2.png</file>
-        <file>resources/images/ClubsSeven.png</file>
+        <file>resources/images/ClubsSeven1.png</file>
         <file>resources/images/ClubsSeven2.png</file>
-        <file>resources/images/ClubsSix.png</file>
+        <file>resources/images/ClubsSix1.png</file>
         <file>resources/images/ClubsSix2.png</file>
-        <file>resources/images/ClubsTen.png</file>
+        <file>resources/images/ClubsTen1.png</file>
         <file>resources/images/ClubsTen2.png</file>
-        <file>resources/images/ClubsThree.png</file>
+        <file>resources/images/ClubsThree1.png</file>
         <file>resources/images/ClubsThree2.png</file>
-        <file>resources/images/ClubsTwo.png</file>
+        <file>resources/images/ClubsTwo1.png</file>
         <file>resources/images/ClubsTwo2.png</file>
-        <file>resources/images/DiamondsAce.png</file>
+        <file>resources/images/DiamondsAce1.png</file>
         <file>resources/images/DiamondsAce2.png</file>
-        <file>resources/images/DiamondsEight.png</file>
+        <file>resources/images/DiamondsEight1.png</file>
         <file>resources/images/DiamondsEight2.png</file>
-        <file>resources/images/DiamondsFive.png</file>
+        <file>resources/images/DiamondsFive1.png</file>
         <file>resources/images/DiamondsFive2.png</file>
-        <file>resources/images/DiamondsFour.png</file>
+        <file>resources/images/DiamondsFour1.png</file>
         <file>resources/images/DiamondsFour2.png</file>
-        <file>resources/images/DiamondsJack.png</file>
+        <file>resources/images/DiamondsJack1.png</file>
         <file>resources/images/DiamondsJack2.png</file>
-        <file>resources/images/DiamondsKing.png</file>
+        <file>resources/images/DiamondsKing1.png</file>
         <file>resources/images/DiamondsKing2.png</file>
-        <file>resources/images/DiamondsNine.png</file>
+        <file>resources/images/DiamondsNine1.png</file>
         <file>resources/images/DiamondsNine2.png</file>
-        <file>resources/images/DiamondsQueen.png</file>
+        <file>resources/images/DiamondsQueen1.png</file>
         <file>resources/images/DiamondsQueen2.png</file>
-        <file>resources/images/DiamondsSeven.png</file>
+        <file>resources/images/DiamondsSeven1.png</file>
         <file>resources/images/DiamondsSeven2.png</file>
-        <file>resources/images/DiamondsSix.png</file>
+        <file>resources/images/DiamondsSix1.png</file>
         <file>resources/images/DiamondsSix2.png</file>
-        <file>resources/images/DiamondsTen.png</file>
+        <file>resources/images/DiamondsTen1.png</file>
         <file>resources/images/DiamondsTen2.png</file>
-        <file>resources/images/DiamondsThree.png</file>
+        <file>resources/images/DiamondsThree1.png</file>
         <file>resources/images/DiamondsThree2.png</file>
-        <file>resources/images/DiamondsTwo.png</file>
+        <file>resources/images/DiamondsTwo1.png</file>
         <file>resources/images/DiamondsTwo2.png</file>
-        <file>resources/images/HeartsAce.png</file>
+        <file>resources/images/HeartsAce1.png</file>
         <file>resources/images/HeartsAce2.png</file>
-        <file>resources/images/HeartsEight.png</file>
+        <file>resources/images/HeartsEight1.png</file>
         <file>resources/images/HeartsEight2.png</file>
-        <file>resources/images/HeartsFive.png</file>
+        <file>resources/images/HeartsFive1.png</file>
         <file>resources/images/HeartsFive2.png</file>
-        <file>resources/images/HeartsFour.png</file>
+        <file>resources/images/HeartsFour1.png</file>
         <file>resources/images/HeartsFour2.png</file>
-        <file>resources/images/HeartsJack.png</file>
+        <file>resources/images/HeartsJack1.png</file>
         <file>resources/images/HeartsJack2.png</file>
-        <file>resources/images/HeartsKing.png</file>
+        <file>resources/images/HeartsKing1.png</file>
         <file>resources/images/HeartsKing2.png</file>
-        <file>resources/images/HeartsNine.png</file>
+        <file>resources/images/HeartsNine1.png</file>
         <file>resources/images/HeartsNine2.png</file>
-        <file>resources/images/HeartsQueen.png</file>
+        <file>resources/images/HeartsQueen1.png</file>
         <file>resources/images/HeartsQueen2.png</file>
-        <file>resources/images/HeartsSeven.png</file>
+        <file>resources/images/HeartsSeven1.png</file>
         <file>resources/images/HeartsSeven2.png</file>
-        <file>resources/images/HeartsSix.png</file>
+        <file>resources/images/HeartsSix1.png</file>
         <file>resources/images/HeartsSix2.png</file>
-        <file>resources/images/HeartsTen.png</file>
+        <file>resources/images/HeartsTen1.png</file>
         <file>resources/images/HeartsTen2.png</file>
-        <file>resources/images/HeartsThree.png</file>
+        <file>resources/images/HeartsThree1.png</file>
         <file>resources/images/HeartsThree2.png</file>
-        <file>resources/images/HeartsTwo.png</file>
+        <file>resources/images/HeartsTwo1.png</file>
         <file>resources/images/HeartsTwo2.png</file>
-        <file>resources/images/SpadesAce.png</file>
+        <file>resources/images/SpadesAce1.png</file>
         <file>resources/images/SpadesAce2.png</file>
-        <file>resources/images/SpadesEight.png</file>
+        <file>resources/images/SpadesEight1.png</file>
         <file>resources/images/SpadesEight2.png</file>
-        <file>resources/images/SpadesFive.png</file>
+        <file>resources/images/SpadesFive1.png</file>
         <file>resources/images/SpadesFive2.png</file>
-        <file>resources/images/SpadesFour.png</file>
+        <file>resources/images/SpadesFour1.png</file>
         <file>resources/images/SpadesFour2.png</file>
-        <file>resources/images/SpadesJack.png</file>
+        <file>resources/images/SpadesJack1.png</file>
         <file>resources/images/SpadesJack2.png</file>
-        <file>resources/images/SpadesKing.png</file>
+        <file>resources/images/SpadesKing1.png</file>
         <file>resources/images/SpadesKing2.png</file>
-        <file>resources/images/SpadesNine.png</file>
+        <file>resources/images/SpadesNine1.png</file>
         <file>resources/images/SpadesNine2.png</file>
-        <file>resources/images/SpadesQueen.png</file>
+        <file>resources/images/SpadesQueen1.png</file>
         <file>resources/images/SpadesQueen2.png</file>
-        <file>resources/images/SpadesSeven.png</file>
+        <file>resources/images/SpadesSeven1.png</file>
         <file>resources/images/SpadesSeven2.png</file>
-        <file>resources/images/SpadesSix.png</file>
+        <file>resources/images/SpadesSix1.png</file>
         <file>resources/images/SpadesSix2.png</file>
-        <file>resources/images/SpadesTen.png</file>
+        <file>resources/images/SpadesTen1.png</file>
         <file>resources/images/SpadesTen2.png</file>
-        <file>resources/images/SpadesThree.png</file>
+        <file>resources/images/SpadesThree1.png</file>
         <file>resources/images/SpadesThree2.png</file>
-        <file>resources/images/SpadesTwo.png</file>
+        <file>resources/images/SpadesTwo1.png</file>
         <file>resources/images/SpadesTwo2.png</file>
         <file>resources/images/back1.png</file>
         <file>resources/images/back2.png</file>

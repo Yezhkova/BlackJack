@@ -69,6 +69,50 @@ void GameWindow::setupSound()
     m_soundControl->setStyleSheet(checkBoxStyle);
     m_soundControl->setGeometry(50, 50, 350, 100);
     connect(m_soundControl, &QCheckBox::stateChanged, m_musicThread, &MusicThread::muteSound);
+
+    m_skinControl = new QComboBox(this);
+    m_skinControl->addItem("Skin 1");
+    m_skinControl->addItem("Skin 2");
+    m_skinControl->setStyleSheet(smallerFont);
+    m_skinControl->setGeometry(50, 200, 80, 30);
+    m_skinControl->setCurrentIndex(0);
+    connect(m_skinControl, &QComboBox::activated, this, &GameWindow::setSkin);
+    m_skin = '1';
+}
+
+void GameWindow::setSkin(int index)
+{
+    m_skin = QString::number(index + 1);
+    for(auto& e: m_game.getPlayers())
+    {
+        if(e.canPlay())
+        {
+            QString playerName = e.getName();
+            for(int card = 0; card < e.getHand().size(); ++card)
+            {
+                QString place =  playerName + "CardLabel" + QString::number(card);
+                auto cardLabel = m_participantsSetups[playerName]->findChild<QLabel*>(place);
+                if(cardLabel == nullptr) qDebug() << place << ": no such value";
+
+                QString currentCard = ":/images/resources/images/"
+                                      + e.getHand()[card].getFullName()
+                                      + m_skin + ".png";
+                drawPicture(cardLabel, currentCard);
+            }
+        }
+    }
+    QString playerName = "Dealer";
+    for(int card = 0; card < m_game.getDealer().getHand().size(); ++card)
+    {
+        QString place =  "DealerCardLabel" + QString::number(card);
+        auto cardLabel = m_participantsSetups["Dealer"]->findChild<QLabel*>(place);
+        if(cardLabel == nullptr) qDebug() << place << ": no such value";
+
+        QString currentCard = ":/images/resources/images/"
+                              +  m_game.getDealer().getHand()[card].getFullName()
+                              + m_skin + ".png";
+        drawPicture(cardLabel, currentCard);
+    }
 }
 
 void GameWindow::setupPlayers(int playersNum)
@@ -317,17 +361,11 @@ void GameWindow::drawAnimation(QLabel *label, const QString& fileName)
 
 void GameWindow::displayCard(Participant *receiver, const QString& cardName, bool flag, bool animate)
 {
-    QString place =  receiver->getName() + "CardLabel" + QString::number(receiver->getHand().size());
+    QString place =  receiver->getName() + "CardLabel" + QString::number(receiver->getHand().size()-1);
     auto cardLabel = m_participantsSetups[receiver->getName()]->findChild<QLabel*>(place);
 
     if(cardLabel == nullptr) qDebug() << place << ": no such value";
-    QString cardToDisplay;
-    if(flag){
-        cardToDisplay = ":/images/resources/images/" + cardName + ".png";
-    }
-    else{
-        cardToDisplay = ":/images/resources/images/back1.png";
-    }
+    QString cardToDisplay = ":/images/resources/images/" + cardName + m_skin + ".png";
     if(animate){
         drawAnimation(cardLabel, cardToDisplay);
     }
@@ -437,10 +475,11 @@ void GameWindow::clearAll()
     {
         displayBalance(&player);
         player.resetScore();
+        player.resetHand();
         player.setBlackjack(false);
         player.setBust(false);
         player.setSoft(false);
-        player.resetHand();
+        player.setActive(true);
     }
 
     m_game.getDealer().resetScore();

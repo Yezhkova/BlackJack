@@ -36,6 +36,7 @@ public slots:
     void displayScore(Participant *receiver,const QString& cardName, bool flag);
     void displayBalance(Player *receiver);
     void enableButton(QPushButton *button, bool active);
+    void setSkin(int index);
     void displayStatus(Participant *receiver, const QString& filepath);
     void displayTextStatus(Participant *receiver, const QString& text);
     void results();
@@ -68,6 +69,7 @@ private:
     std::map<QString, QGroupBox*> m_participantsSetups;
 
     QCheckBox *m_soundControl;
+    QComboBox *m_skinControl;
 
     QPushButton *m_hitButton;
     QPushButton *m_standButton;
@@ -82,6 +84,8 @@ private:
     QString BackgroundPicPath;
     QString CardBackPicPath;
     QString BlackJackPicPath;
+
+    QString m_skin;
 
 };
 

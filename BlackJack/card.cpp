@@ -1,6 +1,6 @@
 #include "card.h"
 
-std::map<std::string, int> Card::cards
+std::map<QString, int> Card::cards
 {
     {"Two", 2},
     {"Three", 3},

@@ -20,7 +20,6 @@ void GameProcess::playRound()
         if(player.canPlay())
         {
             player.makeBet();
-//            emit betsMade();
             m_dealer.dealCards(&player, 2);
         }
     }
@@ -31,7 +30,7 @@ void GameProcess::playRound()
 
 void GameProcess::goOnRound()
 {
-    QString secretCard = m_dealer.getHand().rbegin()->getName();
+    QString secretCard = m_dealer.getHand().rbegin()->getFullName();
     emit m_dealer.cardDealt(&m_dealer, secretCard, true, false);
 
     m_dealer.act(&m_dealer);

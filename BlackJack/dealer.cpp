@@ -13,7 +13,7 @@ void Dealer::makeDeck()
     makeSuit("Clubs");
 }
 
-void Dealer::makeSuit(const std::string& suit)
+void Dealer::makeSuit(const QString& suit)
 {
     for(auto& e: Card::cards) {
         m_deck.emplace_back(Card{suit, e.first, e.second});
@@ -34,10 +34,10 @@ void Dealer::dealCards(Participant *participant, int numberOfCards)
         }
         participant->takeCard(*it);
         if(numberOfCards == 2 && participant->getName()=="Dealer" && i == 1) {
-            emit cardDealt(participant, "back1", false, true);
+            emit cardDealt(participant, "back", false, true);
         }
         else{
-            emit cardDealt(participant, it->getName(), true, true);
+            emit cardDealt(participant, it->getFullName(), true, true);
         }
         m_deck.erase(it);
     }
@@ -48,6 +48,7 @@ bool Dealer::checkForBlackjack(Participant *participant)
     {
         participant->setBlackjack(true);
         participant->setActive(false);
+        qDebug() << participant->getName() << ' ' << participant->getHand().size() << ' ' << participant->getScore() << ' ' << participant->hasBlackjack();
         return true;
     }
     return false;
@@ -81,6 +82,7 @@ int Dealer::compareScore(Player *player)
         emit foundTextStatus(player, text);
         player->loseMoney(player->getBet());
     }
+
     else if(player->hasBlackjack())
     {
         if(this->hasBlackjack())
@@ -94,6 +96,7 @@ int Dealer::compareScore(Player *player)
             player->winMoney(1.5 * player->getBet());
         }
     }
+
     else if(this->isBust() || (winScore - player->getScore()) < (winScore - this->getScore()))
     {
         QString text = "wins " + QString::number(player->getBet()) + '$';
@@ -101,6 +104,7 @@ int Dealer::compareScore(Player *player)
         player->winMoney(player->getBet());
         return 1;
     }
+
     else if((winScore - player->getScore()) > (winScore - this->getScore()))
     {
         QString text = "loses " + QString::number(player->getBet()) + '$';
@@ -108,6 +112,7 @@ int Dealer::compareScore(Player *player)
         player->loseMoney(player->getBet());
         return -1;
     }
+
     else if(player->getScore() == this->getScore())
     {
         if(this->hasBlackjack())
@@ -118,7 +123,6 @@ int Dealer::compareScore(Player *player)
             return -1;
         }
         else {
-            emit foundStatus(player, ":/images/resources/images/blackjackStatus.png");
             emit foundTextStatus(player, "ends in a draw");
         }
     }
