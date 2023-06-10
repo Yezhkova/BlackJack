@@ -60,8 +60,6 @@ void GameWindow::setupSound()
     m_musicThread->start();
     m_mouseSoundThread = new MusicThread(MouseMusicPath, 1);
     m_mouseSoundThread->start();
-    m_cardThread = new MusicThread(CardMusicPath, 1);
-    //    m_cardThread->start();
 
     m_soundControl = new QCheckBox(this);
     m_soundControl->setCheckState(Qt::Checked);
@@ -238,7 +236,6 @@ void GameWindow::setupDealer()
     scoreLabel->setStyleSheet(greaterYellowFont);
     scoreLabel->setText("0");
     scoreLabel->setGeometry(scoreX + nameWidth, scoreY, scoreWidth, scoreHeight);
-    //    connect(&m_game.getDealer(), &Dealer::cardDealt, this, &GameWindow::displayScore);
 
     int initHandPositionX = 0;
     int initHandPositionY = scoreY + scoreHeight+10;
@@ -372,8 +369,6 @@ void GameWindow::displayCard(Participant *receiver, const QString& cardName, boo
     else{
         drawPicture(cardLabel, cardToDisplay);
     }
-    connect(this, &GameWindow::displayingCard, m_cardThread, &MusicThread::run);
-    //    emit displayingCard();
 }
 
 void GameWindow::displayScore(Participant *receiver, const QString &cardName, bool flag)

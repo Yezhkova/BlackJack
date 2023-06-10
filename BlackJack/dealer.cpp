@@ -126,7 +126,5 @@ int Dealer::compareScore(Player *player)
             emit foundTextStatus(player, "ends in a draw");
         }
     }
-
-//    emit balanceUpdated(player);
 }
 

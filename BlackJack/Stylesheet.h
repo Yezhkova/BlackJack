@@ -15,11 +15,11 @@ QString checkBoxStyle = "QCheckBox::indicator"
                         "}"
                         "QCheckBox::indicator:checked "
                         "{"
-                        "background-color: white;" // Replace with your own checked indicator image
+                        "background-color: white;"
                         "}"
                         "QCheckBox::indicator:unchecked "
                         "{"
-                        "background-color: grey" // Replace with your own unchecked indicator image
+                        "background-color: grey"
                         "}";
 
 QString greaterFont = "font-size: 20px; color: white; font-weight: bold;";

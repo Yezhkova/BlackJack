@@ -18,8 +18,6 @@ public:
     void closeEvent(QCloseEvent *event) override
     {
         exit(0);
-        // Accept the close event to allow the window to close
-        //        event->accept();
     }
 
     GameWindow *gamewindow;

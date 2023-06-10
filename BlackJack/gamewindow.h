@@ -24,8 +24,6 @@ public:
     void closeEvent(QCloseEvent *event) override
     {
         exit(0);
-        // Accept the close event to allow the window to close
-//        event->accept();
     }
 
     void drawPicture(QLabel *label, const QString& fileName);
@@ -59,7 +57,6 @@ private:
     MainWindow *m_parent;
     MusicThread *m_musicThread;
     MusicThread *m_mouseSoundThread;
-    MusicThread *m_cardThread;
 
     GameProcess m_game;
     int m_globWidth = 1280;
