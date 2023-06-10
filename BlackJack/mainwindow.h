@@ -14,13 +14,21 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+    void closeEvent(QCloseEvent *event) override
+    {
+        exit(0);
+    }
+
     GameWindow *gamewindow;
-    void playMusic(const QString& s);
 
 private slots:
     void on_quitButton_clicked();
 
     void on_playButton_clicked();
+
+signals:
+    void muteBackgroundMusic();
 
 private:
     Ui::MainWindow *ui;

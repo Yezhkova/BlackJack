@@ -19,40 +19,29 @@ MainWindow::MainWindow(QWidget *parent)
     ui->bgLabel->lower();
     this->setFixedSize(800,600);
     this->show();
+
     // Start the thread to play the background music
-    musicThread = new MusicThread;
+    musicThread = new MusicThread(":/sounds/resources/sounds/ukulele.wav", -2);
     musicThread->start();
 }
 
 void MainWindow::on_quitButton_clicked()
 {
-    musicThread->quit();
-    musicThread->requestInterruption();
-
+    musicThread->endLater();
     QApplication::quit();
 }
 
 void MainWindow::on_playButton_clicked()
 {
-    musicThread->quit();
-    musicThread->requestInterruption();
-
-    gamewindow = new GameWindow(this);
+    musicThread->endLater();
+    QString players = ui->playersNumberComboBox->currentText();
+    gamewindow = new GameWindow( this, players.toInt());
     gamewindow->show();
     this->hide();
-}
-
-void MainWindow::playMusic(const QString& s)
-{
-    QSoundEffect effect;
-    effect.setSource(QUrl::fromLocalFile(s));
-    effect.setVolume(1.0);
-    effect.play();
-    QEventLoop eventloop;
-    eventloop.exec();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete musicThread;
 }
