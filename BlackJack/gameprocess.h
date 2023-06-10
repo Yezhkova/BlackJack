@@ -32,6 +32,7 @@ public slots:
 
 signals:
     void roundStarted();
+    void continueRound();
     void roundFinished();
     void betsMade();
 

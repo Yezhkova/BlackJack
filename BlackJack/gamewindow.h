@@ -4,6 +4,7 @@
 #include "qcheckbox.h"
 #include "qlabel.h"
 #include "qpushbutton.h"
+#include "qtimer.h"
 #include "ui_gamewindow.h"
 #include <QMainWindow>
 #include <QGroupBox>
@@ -35,6 +36,7 @@ public slots:
     void displayBalance(Player *receiver);
     void enableButton(QPushButton *button, bool active);
     void setSkin(int index);
+    void resetWidgets();
     void displayStatus(Participant *receiver, const QString& filepath);
     void displayTextStatus(Participant *receiver, const QString& text);
     void results();

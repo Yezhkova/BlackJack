@@ -39,6 +39,7 @@ GameWindow::GameWindow(MainWindow *parent, int playersNum) :
     setupSound();
     setupSkin();
     connect(&m_game, &GameProcess::roundStarted, this, &GameWindow::clearAll);
+    connect(&m_game, &GameProcess::continueRound, this, &GameWindow::resetWidgets);
     connect(&m_game, &GameProcess::roundFinished, this, &GameWindow::results);
     setupPlayers(playersNum);
     setupControl();
@@ -307,14 +308,14 @@ void GameWindow::setupControl()
     m_standButton->setGeometry(userActionsX, standY, buttonWidth, buttonHeight);
     m_standButton->setStyleSheet(smallerFont);
     m_standButton->setEnabled(false);
-    connect(m_standButton, &QPushButton::released, this, [this]{enableButton(m_hitButton, false);});
-    connect(m_standButton, &QPushButton::released, this, [this]{enableButton(m_standButton, false);});
-    connect(m_standButton, &QPushButton::released, &m_game.getPlayers()[0]
-            , [this] {m_game.getPlayers()[0].setActive(false);});
-    connect(m_standButton, &QPushButton::released, this, [this]{m_betBox->setEnabled(true);});
+//    connect(m_standButton, &QPushButton::released, this, [this]{enableButton(m_hitButton, false);});
+//    connect(m_standButton, &QPushButton::released, this, [this]{enableButton(m_standButton, false);});
+//    connect(m_standButton, &QPushButton::released, &m_game.getPlayers()[0]
+//            , [this] {m_game.getPlayers()[0].setActive(false);});
+//    connect(m_standButton, &QPushButton::released, this, [this]{m_betBox->setEnabled(true);});
     connect(m_standButton, &QPushButton::released, &m_game, &GameProcess::goOnRound);
     connect(m_standButton, &QPushButton::pressed, m_mouseSoundThread, &MusicThread::run);
-    connect(m_standButton, &QPushButton::released, [this]{checkPossibleBets(&m_game.getPlayers()[0]);});
+//    connect(m_standButton, &QPushButton::released, [this]{checkPossibleBets(&m_game.getPlayers()[0]);});
 
     m_betBox = new QComboBox(this);
 
@@ -365,9 +366,9 @@ void GameWindow::drawAnimation(QLabel *label, const QString& fileName)
 
 void GameWindow::displayCard(Participant *receiver, const QString& cardName, bool flag, bool animate)
 {
+    qDebug() << "...displaying " << cardName;
     QString place =  receiver->getName() + "CardLabel" + QString::number(receiver->getHand().size()-1);
     auto cardLabel = m_participantsSetups[receiver->getName()]->findChild<QLabel*>(place);
-
     if(cardLabel == nullptr) qDebug() << place << ": no such value";
     QString cardToDisplay = RelativePicPath + cardName + m_skin + ".png";
     if(animate){
@@ -380,6 +381,7 @@ void GameWindow::displayCard(Participant *receiver, const QString& cardName, boo
 
 void GameWindow::displayScore(Participant *receiver, const QString &cardName, bool flag)
 {
+    qDebug() << "...displaying score for " << cardName;
     QString place =  receiver->getName() + "ScoreLabel";
     auto scoreLabel = m_participantsSetups[receiver->getName()]->findChild<QLabel*>(place);
     if(flag) {
@@ -410,6 +412,14 @@ void GameWindow::displayTextStatus(Participant *receiver, const QString& text)
     textStatusLabel->setText(text);
 }
 
+void GameWindow::resetWidgets()
+{
+    m_hitButton->setEnabled(false);
+    m_standButton->setEnabled(false);
+    m_betBox->setEnabled(true);
+    checkPossibleBets(&m_game.getPlayers()[0]);
+}
+
 void GameWindow::enableButton(QPushButton *button, bool active)
 {
     button->setEnabled(active);
@@ -426,14 +436,18 @@ void GameWindow::checkPossibleBets(Player *player)
 
 void GameWindow::results()
 {
+    qDebug() << "in results";
     m_game.getDealer().compareScore(&m_game.getDealer());
     for(auto& player: m_game.getPlayers())
     {
+        qDebug() << "comparing scores for " << player.getName();
         if(player.canPlay()){
             m_game.getDealer().compareScore(&player);
+            qDebug() << "score compared for " << player.getName();
             emit displayBalance(&player);
         }
     }
+    qDebug() << "done with loop";
     if(m_game.getPlayers()[0].getBalance() == 0)
     {
         displayStatus(&m_game.getPlayers()[0], GameoverPicPath);

@@ -48,7 +48,6 @@ bool Dealer::checkForBlackjack(Participant *participant)
     {
         participant->setBlackjack(true);
         participant->setActive(false);
-        qDebug() << participant->getName() << ' ' << participant->getHand().size() << ' ' << participant->getScore() << ' ' << participant->hasBlackjack();
         return true;
     }
     return false;
@@ -73,8 +72,9 @@ void Dealer::compareScore(Participant *participant)
     }
 }
 
-int Dealer::compareScore(Player *player)
+void Dealer::compareScore(Player *player)
 {
+    qDebug() << "in compareScore - " << player->getName();
     if(player->isBust())
     {
         emit foundStatus(player, ":/images/resources/images/bustStatus.png");
@@ -102,7 +102,6 @@ int Dealer::compareScore(Player *player)
         QString text = "wins " + QString::number(player->getBet()) + '$';
         emit foundTextStatus(player, text);
         player->winMoney(player->getBet());
-        return 1;
     }
 
     else if((winScore - player->getScore()) > (winScore - this->getScore()))
@@ -110,7 +109,6 @@ int Dealer::compareScore(Player *player)
         QString text = "loses " + QString::number(player->getBet()) + '$';
         emit foundTextStatus(player, text);
         player->loseMoney(player->getBet());
-        return -1;
     }
 
     else if(player->getScore() == this->getScore())
@@ -120,7 +118,6 @@ int Dealer::compareScore(Player *player)
             QString text = "loses " + QString::number(player->getBet()) + '$';
             emit foundTextStatus(player, text);
             player->loseMoney(player->getBet());
-            return -1;
         }
         else {
             emit foundTextStatus(player, "ends in a draw");
