@@ -4,7 +4,6 @@
 #include "qcheckbox.h"
 #include "qlabel.h"
 #include "qpushbutton.h"
-#include "qtimer.h"
 #include "ui_gamewindow.h"
 #include <QMainWindow>
 #include <QGroupBox>

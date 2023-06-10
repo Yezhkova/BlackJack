@@ -366,7 +366,6 @@ void GameWindow::drawAnimation(QLabel *label, const QString& fileName)
 
 void GameWindow::displayCard(Participant *receiver, const QString& cardName, bool flag, bool animate)
 {
-    qDebug() << "...displaying " << cardName;
     QString place =  receiver->getName() + "CardLabel" + QString::number(receiver->getHand().size()-1);
     auto cardLabel = m_participantsSetups[receiver->getName()]->findChild<QLabel*>(place);
     if(cardLabel == nullptr) qDebug() << place << ": no such value";
@@ -381,7 +380,6 @@ void GameWindow::displayCard(Participant *receiver, const QString& cardName, boo
 
 void GameWindow::displayScore(Participant *receiver, const QString &cardName, bool flag)
 {
-    qDebug() << "...displaying score for " << cardName;
     QString place =  receiver->getName() + "ScoreLabel";
     auto scoreLabel = m_participantsSetups[receiver->getName()]->findChild<QLabel*>(place);
     if(flag) {
@@ -436,18 +434,14 @@ void GameWindow::checkPossibleBets(Player *player)
 
 void GameWindow::results()
 {
-    qDebug() << "in results";
     m_game.getDealer().compareScore(&m_game.getDealer());
     for(auto& player: m_game.getPlayers())
     {
-        qDebug() << "comparing scores for " << player.getName();
         if(player.canPlay()){
             m_game.getDealer().compareScore(&player);
-            qDebug() << "score compared for " << player.getName();
             emit displayBalance(&player);
         }
     }
-    qDebug() << "done with loop";
     if(m_game.getPlayers()[0].getBalance() == 0)
     {
         displayStatus(&m_game.getPlayers()[0], GameoverPicPath);

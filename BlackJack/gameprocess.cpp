@@ -33,10 +33,8 @@ void GameProcess::playRound()
 void GameProcess::goOnRound()
 {
     m_players[0].setActive(false);
-    qDebug() << m_dealer.getHand().rbegin()->getFullName();
     QString secretCard = m_dealer.getHand().rbegin()->getFullName();
     emit m_dealer.cardDealt(&m_dealer, secretCard, true, false);
-    qDebug() << "just displayed " << secretCard;
     m_dealer.act(&m_dealer);
     m_dealer.checkCardAmount();
     emit continueRound();
@@ -54,6 +52,5 @@ void GameProcess::goOnRound()
             }
         }
     }
-    qDebug() << "ready to finish round";
     emit roundFinished();
 }
