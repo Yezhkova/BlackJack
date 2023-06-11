@@ -301,21 +301,21 @@ void GameWindow::setupControl()
     m_hitButton->setStyleSheet(smallerFont);
     m_hitButton->setEnabled(false);
     connect(m_hitButton, &QPushButton::released, &m_game.getDealer()
-            , [this] {m_game.getDealer().dealCards(&m_game.getPlayers()[0], 1);});
+            , [this] {
+        m_game.getDealer().dealCards(&m_game.getPlayers()[0], 1);
+        if (m_game.getPlayers()[0].getHand().size() == 11)
+        {
+            m_hitButton->setEnabled(false);
+        }
+    });
     connect(m_hitButton, &QPushButton::pressed, m_mouseSoundThread, &MusicThread::run);
 
     m_standButton = new QPushButton("Stand", this);
     m_standButton->setGeometry(userActionsX, standY, buttonWidth, buttonHeight);
     m_standButton->setStyleSheet(smallerFont);
     m_standButton->setEnabled(false);
-//    connect(m_standButton, &QPushButton::released, this, [this]{enableButton(m_hitButton, false);});
-//    connect(m_standButton, &QPushButton::released, this, [this]{enableButton(m_standButton, false);});
-//    connect(m_standButton, &QPushButton::released, &m_game.getPlayers()[0]
-//            , [this] {m_game.getPlayers()[0].setActive(false);});
-//    connect(m_standButton, &QPushButton::released, this, [this]{m_betBox->setEnabled(true);});
     connect(m_standButton, &QPushButton::released, &m_game, &GameProcess::goOnRound);
     connect(m_standButton, &QPushButton::pressed, m_mouseSoundThread, &MusicThread::run);
-//    connect(m_standButton, &QPushButton::released, [this]{checkPossibleBets(&m_game.getPlayers()[0]);});
 
     m_betBox = new QComboBox(this);
 
@@ -415,7 +415,6 @@ void GameWindow::resetWidgets()
     m_hitButton->setEnabled(false);
     m_standButton->setEnabled(false);
     m_betBox->setEnabled(true);
-    checkPossibleBets(&m_game.getPlayers()[0]);
 }
 
 void GameWindow::enableButton(QPushButton *button, bool active)
@@ -430,6 +429,13 @@ void GameWindow::checkPossibleBets(Player *player)
         auto * item = model->item(i);
         item->setEnabled(player->getBalance() >= Player::bets[i]);
     }
+    int idx = m_betBox->currentIndex();
+    qDebug() << m_betBox->currentText().toInt() << player->getBalance();
+    while(m_betBox->currentText().toInt() > player->getBalance())
+    {
+        m_betBox->setCurrentIndex(--idx);
+    }
+    emit m_betBox->activated(idx);
 }
 
 void GameWindow::results()
@@ -442,6 +448,7 @@ void GameWindow::results()
             emit displayBalance(&player);
         }
     }
+    checkPossibleBets(&m_game.getPlayers()[0]);
     if(m_game.getPlayers()[0].getBalance() == 0)
     {
         displayStatus(&m_game.getPlayers()[0], GameoverPicPath);
@@ -454,7 +461,6 @@ void GameWindow::results()
 
 void GameWindow::clearAll()
 {
-    checkPossibleBets(&m_game.getPlayers()[0]);
     m_playButton->setEnabled(false);
     m_playButton->setText("New round!");
     m_hitButton->setEnabled(true);

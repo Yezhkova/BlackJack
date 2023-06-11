@@ -33,11 +33,11 @@ void GameProcess::playRound()
 void GameProcess::goOnRound()
 {
     m_players[0].setActive(false);
+    emit continueRound();
     QString secretCard = m_dealer.getHand().rbegin()->getFullName();
     emit m_dealer.cardDealt(&m_dealer, secretCard, true, false);
     m_dealer.act(&m_dealer);
     m_dealer.checkCardAmount();
-    emit continueRound();
     for(auto& player: m_players)
     {
         if(player.canPlay())
