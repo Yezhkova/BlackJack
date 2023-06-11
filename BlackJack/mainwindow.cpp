@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "gamewindow.h"
 #include "musicthread.h"
-#include "qsoundeffect.h"
 #include "ui_mainwindow.h"
 #include <QPixmap>
 
